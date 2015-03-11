@@ -20,11 +20,12 @@ module.exports = function (app, passport) {
     successRedirect : '/profile', // redirect to the secure profile section
     failureRedirect : '/login', // redirect to signup on error
   }));
+  // TODO: get messages in there!
   app.get('/signup', function (req, res) {
-    res.render('signup.ejs', { message: "woot" });
+    res.render('signup.ejs', { message: "woot", user: req.user });
   });
   app.get('/login', function (req, res) {
-    res.render('login.ejs', { message: "hoot" }); 
+    res.render('login.ejs', { message: "hoot", user: req.user });
   });
   app.get('/logout', function (req, res) {
     req.logout();

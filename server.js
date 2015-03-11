@@ -26,8 +26,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // set up ejs for templating
-app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
+app.engine('ejs', require('ejs-locals'));
 
 // session middleware
 app.use(session({
