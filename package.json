@@ -25,6 +25,7 @@
     "passport-local": "^1.0.0"
   },
   "devDependencies": {
+    "coveralls": "^2.11.2",
     "jscoverage": "^0.5.9",
     "nodeunit": "^0.9.1",
     "request": "^2.53.0"
