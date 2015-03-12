@@ -11,6 +11,11 @@ module.exports = function (app, passport) {
     res.render('index.ejs', { user: req.user, links: [] });
   });
 
+  app.post('/report', function (req, res) {
+    console.log('Reported:', req.headers.referer);
+    res.sendStatus(200).end();
+  });
+
   // signup / login / logout
   app.post('/signup', passport.authenticate('local-signup', {
     successRedirect : '/profile', // redirect to the secure profile section
@@ -40,4 +45,3 @@ module.exports = function (app, passport) {
     res.render('profile.ejs', { user : req.user });
   });
 };
-  
