@@ -23,7 +23,7 @@ app.disable('x-powered-by');
 app.use(helmet.frameguard('deny'));
 // CSP - may need tweaking for CSRF + android use
 app.use(helmet.contentSecurityPolicy({
-  defaultSrc: ["'self'", "'unsafe-inline'", 'localhost:8000'],
+  defaultSrc: ["'self'", "'unsafe-inline'", 'localhost'],
   sandbox: ['allow-forms', 'allow-scripts'],
   reportUri: '/report',
   reportOnly: false, // set to true if you only want to report errors
@@ -61,15 +61,4 @@ app.use(passport.session());
 // initialize routes
 require('./app/routes.js')(app, passport);
 
-if (true) {
-  app.listen(8000);
-}
-else {
-  var fs = require('fs');
-  var options = {
-    key: fs.readFileSync('/keys/example-key.pem'),
-    cert: fs.readFileSync('/keys/example-cert.pem')
-  };
-  require('http').createServer(app).listen(80);
-  require('https').createServer(options, app).listen(443);
-}
+module.exports = app;
