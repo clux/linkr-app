@@ -2,3 +2,10 @@
 <h1>linkr</h1>
 
 <h2>Welcome, <%= user ? user.username : 'anonymous' %>!</h2>
+
+<linkr-list></linkr-list>
+
+<%-'<script>\n' +
+  'var list = document.querySelector("linkr-list");\n' +
+  'list.tags = ' + JSON.stringify(links) + ';\n' +
+'</script>'%>

@@ -8,7 +8,7 @@ var isLoggedIn = function (req, res, next) {
 module.exports = function (app, passport) {
   // main
   app.get('/', function (req, res) {
-    res.render('index.ejs', { user: req.user });
+    res.render('index.ejs', { user: req.user, links: [] });
   });
 
   // signup / login / logout
