@@ -1,6 +1,6 @@
+var app = require(process.env.LINKR_COV ? '../server-cov/' : '../server/');
 var request = require('request');
 var http = require('http');
-var app = require('../');
 
 module.exports = {
   setUp: function (cb) {

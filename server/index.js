@@ -13,7 +13,7 @@ require('./config/passport')(passport);
 var app = express();
 
 // set up ejs for templating
-app.set('views', __dirname + '/views');
+app.set('views', __dirname + '/../views');
 app.set('view engine', 'ejs');
 app.engine('ejs', require('ejs-locals'));
 
@@ -59,6 +59,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // initialize routes
-require('./app/routes.js')(app, passport);
+require('./routes.js')(app, passport);
 
 module.exports = app;
