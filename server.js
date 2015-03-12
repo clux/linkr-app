@@ -1,9 +1,9 @@
-var morgan = require('morgan')
+var express = require('express')
   , cookieParser = require('cookie-parser')
   , bodyParser = require('body-parser')
   , session = require('express-session')
   , passport = require('passport')
-  , express = require('express')
+  , morgan = require('morgan')
   ;
 
 require('./config/passport')(passport);
@@ -44,4 +44,15 @@ app.use(passport.session());
 // initialize routes
 require('./app/routes.js')(app, passport);
 
-app.listen(8000);
+if (true) {
+  app.listen(8000);
+}
+else {
+  var fs = require('fs');
+  var options = {
+    key: fs.readFileSync('/keys/example-key.pem'),
+    cert: fs.readFileSync('/keys/example-cert.pem')
+  };
+  require('http').createServer(app).listen(80);
+  require('https').createServer(options, app).listen(443);
+}
