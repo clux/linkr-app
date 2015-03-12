@@ -12,7 +12,7 @@ module.exports = function (app, passport) {
   });
 
   app.post('/report', function (req, res) {
-    console.log('Reported:', req.headers.referer);
+    console.log('CSP Violation from', req.headers.referer);
     res.sendStatus(200).end();
   });
 

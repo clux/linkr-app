@@ -17,7 +17,6 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.engine('ejs', require('ejs-locals'));
 
-
 // security
 app.disable('x-powered-by');
 // prevent page being put in iframes
