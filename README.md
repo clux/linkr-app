@@ -3,3 +3,12 @@
 [![coverage status](http://img.shields.io/coveralls/clux/linkr-app.svg)](https://coveralls.io/r/clux/linkr-app)
 
 A simple, but full fledged express app with local passport authentication.
+
+## Install
+Clone and install dependencies:
+
+```sh
+git clone git@github.com:clux/linkr-app.git
+bower install
+npm install
+```

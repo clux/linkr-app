@@ -28,6 +28,9 @@ app.use(helmet.contentSecurityPolicy({
   reportUri: '/report',
   reportOnly: false, // set to true if you only want to report errors
 }));
+// TODO: style-src 'self' data: chrome-extension-resource: 'unsafe-inline'; ?
+// should be allowed since unsafe-inline is allowed everywhere
+
 // cross domain policy
 app.use(helmet.crossdomain());
 // disable cache while developing
