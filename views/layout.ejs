@@ -1,23 +1,25 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Passport-Local Example</title>
-	</head>
-	<body>
-		<% if (!user) { %>
-			<p>
-			<a href="/">Home</a> | 
-			<a href="/login">Local Login</a>
-  		<a href="/signup">Local Signup</a>			
-			<a href="/login">Log In</a>
-			</p>
-		<% } else { %>
-			<p>
-			<a href="/">Home</a>
-			<a href="/profile">Profile</a>
-			<a href="/logout">Log Out</a>
-			</p>
-		<% } %>
-		<%- body %>
-	</body>
+  <head>
+    <title>Passport-Local Example</title>
+    <script src="/js/webcomponents-lite.js"></script>
+    <link rel="import" href="/html/components.html">
+  </head>
+  <body>
+    <% if (!user) { %>
+      <p>
+      <a href="/">Home</a> |
+      <a href="/login">Local Login</a>
+      <a href="/signup">Local Signup</a>
+      <a href="/login">Log In</a>
+      </p>
+    <% } else { %>
+      <p>
+      <a href="/">Home</a>
+      <a href="/profile">Profile</a>
+      <a href="/logout">Log Out</a>
+      </p>
+    <% } %>
+    <%- body %>
+  </body>
 </html>

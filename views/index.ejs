@@ -3,9 +3,11 @@
 
 <h2>Welcome, <%= user ? user.username : 'anonymous' %>!</h2>
 
-<linkr-list></linkr-list>
+<ul id="#links" is="linkr-list"></ul>
+<ice-breaker></ice-breaker>
 
-<%-'<script>\n' +
-  'var list = document.querySelector("linkr-list");\n' +
-  'list.tags = ' + JSON.stringify(links) + ';\n' +
-'</script>'%>
+<script>
+  // TODO: refine selector..
+  var list = document.querySelector("ul");
+  list.links = <%-JSON.stringify(links)%>;
+</script>
