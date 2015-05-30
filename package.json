@@ -5,7 +5,7 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "build": "mkdir -p assets && vulcanize components.html > assets/components.html",
+    "build": "./build.sh",
     "start": "node app.js",
     "test": "nodeunit test/*.test.js --reporter=verbose",
     "coverage": "jscoverage server && LINKR_COV=1 nodeunit --reporter=lcov test/*.test.js",
