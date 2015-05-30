@@ -2,7 +2,7 @@
 [![build status](https://secure.travis-ci.org/clux/linkr-app.svg)](http://travis-ci.org/clux/linkr-app)
 [![coverage status](http://img.shields.io/coveralls/clux/linkr-app.svg)](https://coveralls.io/r/clux/linkr-app)
 [![dependency status](https://david-dm.org/clux/linkr-app.svg)](https://david-dm.org/clux/linkr-app)
-[![development dependency status](https://david-dm.org/clux/linkr-app/dev-status.svg)](https://david-dm.org/clux/linkr-app)
+[![development dependency status](https://david-dm.org/clux/linkr-app/dev-status.svg)](https://david-dm.org/clux/linkr-app#info=devDependencies)
 
 
 A simple, but full fledged express app with local passport authentication.
