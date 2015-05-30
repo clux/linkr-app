@@ -4,6 +4,6 @@
   "version": "0.0.0",
   "dependencies": {
     "icebreaker": "~0.4.0",
-    "linkr-components": "git@github.com:clux/linkr-components.git"
+    "linkr-components": "clux/linkr-components"
   }
 }
