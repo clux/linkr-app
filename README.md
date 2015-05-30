@@ -14,4 +14,5 @@ Clone and install dependencies:
 git clone git@github.com:clux/linkr-app.git
 bower install
 npm install
+npm build
 ```
