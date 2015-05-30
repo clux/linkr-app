@@ -3,6 +3,10 @@
   "author": "Eirik Albrigtsen <analsandblaster@gmail.com>",
   "description": "A small personal express server",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "clux/linkr-app"
+  },
   "version": "0.0.0",
   "scripts": {
     "build": "./build.sh",
