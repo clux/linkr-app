@@ -1,5 +1,5 @@
 var pg = require('pg');
-var url = process.env.DATABASE_URL || 'postgres://localhost:5432/linkr';
+var url = process.env.DATABASE_URL;
 
 exports.query = function (query, cb) {
   pg.connect(url, function (err, client, done) {
@@ -13,3 +13,13 @@ exports.query = function (query, cb) {
     });
   });
 };
+
+if (module === require.main) {
+  exports.query('SELECT NOW() AS "theTime"', function (err, res) {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+    console.log(res.rows[0].theTime);
+  });
+}
