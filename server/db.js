@@ -1,25 +1,30 @@
-var pg = require('pg');
-var url = process.env.DATABASE_URL;
+var Sequelize = require('sequelize');
+var sequelize = new Sequelize(process.env.DATABASE_URL);
 
-exports.query = function (query, cb) {
-  pg.connect(url, function (err, client, done) {
-    if (err) {
-      return cb(err);
-    }
-    client.query(query, function (qerr, result) {
-      cb(qerr, result); // pass up result
-      done(); // release pg client back to pool
-      client.end(); // no more queries
-    });
-  });
-};
+var Link = sequelize.define('Link', {
+  title: {
+    type: Sequelize.STRING(100),
+    validate: { notEmpty: true }
+  },
+  link: {
+    type: Sequelize.STRING(200),
+    validate: { isUrl: true, notEmpty: true }
+  },
+  category: {
+    type: Sequelize.INTEGER,
+    defaultValue: 0,
+    validate: { min: 0, max: 10 }
+  },
+  // TODO: username link + comments
+});
 
-if (module === require.main) {
-  exports.query('SELECT NOW() AS "theTime"', function (err, res) {
-    if (err) {
-      console.error(err);
-      process.exit(1);
-    }
-    console.log(res.rows[0].theTime);
+return sequelize.sync({ force: true }).then(function() {
+  return Link.create({
+    title: 'new link',
+    link: 'http://docs.sequelizejs.com/en/latest/docs/models-definition/'
   });
-}
+}).then(function (entry) {
+  console.log(entry.get({
+    plain: true
+  }));
+});
