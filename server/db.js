@@ -22,9 +22,25 @@ sequelize.sync({ force: true }).then(function() {
   Link.bulkCreate([
     { title: 'sequelize',  link: 'http://docs.sequelizejs.com/' },
     { title: 'clux',  link: 'http://clux.org/' }
-  ]).then(function () {
-    Link.findAll({ limit: 5, offset: 0, raw: true }).then(function (links) {
+  ]);
+});
+
+// pagainator
+exports.findAll = function (limit, offset, cb) {
+  Link.findAll({ limit: limit, offset: offset, raw: true }).then(function (links) {
+    cb(null, links);
+  }).catch(function (err) {
+    cb(err);
+  });
+};
+
+if (module === require.main) {
+  setTimeout(function () {
+    exports.findAll(5, 0, function (err, links) {
+      if (err) {
+        console.error(err);
+      }
       console.log(links);
     });
-  });
-});
+  }, 500);
+}
