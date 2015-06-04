@@ -18,13 +18,13 @@ var Link = sequelize.define('Link', {
   // TODO: username link + comments
 });
 
-return sequelize.sync({ force: true }).then(function() {
-  return Link.create({
-    title: 'new link',
-    link: 'http://docs.sequelizejs.com/en/latest/docs/models-definition/'
+sequelize.sync({ force: true }).then(function() {
+  Link.bulkCreate([
+    { title: 'sequelize',  link: 'http://docs.sequelizejs.com/' },
+    { title: 'clux',  link: 'http://clux.org/' }
+  ]).then(function () {
+    Link.findAll({ limit: 5, offset: 0, raw: true }).then(function (links) {
+      console.log(links);
+    });
   });
-}).then(function (entry) {
-  console.log(entry.get({
-    plain: true
-  }));
 });
