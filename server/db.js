@@ -18,6 +18,24 @@ var Link = sequelize.define('Link', {
   // TODO: username link + comments
 });
 
+var User = sequelize.define('User', {
+  //indexes: {
+  //  unique: true,
+  //  fields: [ 'email' ]
+  //},
+  email: {
+    type: Sequelize.STRING(100),
+    validate: { isEmail: true, notEmpty: true }
+  },
+  username: {
+    type: Sequelize.STRING(16),
+    validate: { notEmpty: true }
+  }
+});
+
+Link.belongsTo(User, {foreignKey: 'fk_user'});
+
+
 sequelize.sync({ force: true }).then(function() {
   Link.bulkCreate([
     { title: 'sequelize',  link: 'http://docs.sequelizejs.com/' },
