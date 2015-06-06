@@ -49,8 +49,10 @@ app.use(helmet.noCache());
 // serve static files
 app.use(express.static(join(__dirname, '..', 'assets')));
 
-// log every request to the console
-app.use(morgan('dev'));
+// log every request to the console unless we are measuring coverage
+if (!process.env.LINKR_COV) {
+  app.use(morgan('dev'));
+}
 
 // read cookies for auth
 app.use(cookieParser());
