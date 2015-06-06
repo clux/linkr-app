@@ -73,6 +73,13 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+// NB: express magic: this function breaks without next in its parameter list
+app.use(function ErrorHandler(err, req, res, next) { // ignore lint error!
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+// although this still dont seem to catch the UniqueConstraintError from sequelize..
+
 // initialize routes
 require('./routes.js')(app, passport);
 

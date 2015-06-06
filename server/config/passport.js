@@ -12,14 +12,14 @@ var localLogin = new LocalStrat(opts, function (req, name, pw, done) {
   User.findUserByName(name, function (err, user) {
     if (err) { return done(err); }
     if (!user) {
-      return done(null, false, { message: 'No user "' + name + '" found' });
+      return done(null, null, { message: 'No user "' + name + '" found' });
     }
     User.comparePassword(pw, user.hash, function (err, res) {
       if (err) {
         return done(err);
       }
       if (!res) {
-        return done(null, false, { message: 'Wrong password' });
+        return done(null, null, { message: 'Wrong password' });
       }
       done(null, user);
     });
@@ -32,10 +32,16 @@ var localSignup = new LocalStrat(opts, function (req, name, pw, done) {
       return done(err);
     }
     if (user) {
-      return done(null, false, { message: 'User already exists' });
+      return done(null, null, { message: 'User already exists' });
     }
-    // TODO: need to pass email through here somehow..
-    User.createUser(name, 'test@bah.com', pw, function (err, user) {
+    var email = req.body.email;
+    if (!email) {
+      return done(null, null, { message: 'Missing email' });
+    }
+    // TODO: validate that email does not exist so we avoid unique constraint error?
+    //Users.findUserByEmail()
+
+    User.createUser(name, email, pw, function (err, user) {
       if (err) {
         return done(err);
       }
@@ -50,7 +56,7 @@ module.exports = function (passport) {
   });
 
   passport.deserializeUser(function (id, done) {
-    User.findUserById(id, function(err, user) {
+    User.findUserById(id, function (err, user) {
       done(err, user);
     });
   });

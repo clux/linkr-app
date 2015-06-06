@@ -4,6 +4,12 @@ var http = require('http');
 
 var root = 'http://localhost:8000';
 
+var verifyRedirect = function (t, resp) {
+  t.equal(resp.statusCode, 302, '302 redirect');
+  t.ok(resp.headers.location, 'location header set on redirect');
+  return resp.headers.location;
+};
+
 module.exports = {
   setUp: function (cb) {
     this.server = http.createServer(linkr);
@@ -30,9 +36,7 @@ module.exports = {
     request.post(url, { form: { username: 'whoisthisguy', password: 'bah'} },
       function (err, resp, body) {
         t.equal(err, null, 'no error');
-        t.equal(resp.statusCode, 302, '302 redirect');
-        t.ok(resp.headers.location, 'location header set on redirect');
-        t.equal(resp.headers.location, '/login', 'failed to log in');
+        t.equal(verifyRedirect(t, resp), '/login', 'failed to log in');
         t.done();
     });
   },
@@ -42,9 +46,7 @@ module.exports = {
     request.post(url, { form: { username: 'clux', password: 'notright'} },
       function (err, resp, body) {
         t.equal(err, null, 'no error');
-        t.equal(resp.statusCode, 302, '302 redirect');
-        t.ok(resp.headers.location, 'location header set on redirect');
-        t.equal(resp.headers.location, '/login', 'failed to log in');
+        t.equal(verifyRedirect(t, resp), '/login', 'failed to log in');
         t.done();
     });
   },
@@ -54,9 +56,51 @@ module.exports = {
     request.post(url, { form: { username: 'clux', password: 'heythere'} },
       function (err, resp, body) {
         t.equal(err, null, 'no error');
-        t.equal(resp.statusCode, 302, '302 redirect');
-        t.ok(resp.headers.location, 'location header set on redirect');
-        t.equal(resp.headers.location, '/profile', 'managed to log in');
+        t.equal(verifyRedirect(t, resp), '/profile', 'managed to log in');
+        t.done();
+    });
+  },
+
+  signupNameTaken: function (t) {
+    var url = root + '/signup';
+    request.post(url,
+      { form: { username: 'clux', email: 'me@hax.net', password: 'heythere'} },
+      function (err, resp, body) {
+        t.equal(err, null, 'no error');
+        t.equal(verifyRedirect(t, resp), '/signup', 'failed to recreate user');
+        t.done();
+    });
+  },
+
+  signupNoPassword: function (t) {
+    var url = root + '/signup';
+    request.post(url, { form:
+      { username: 'newuser', email: 'me@hax.net', password: ''} },
+      function (err, resp, body) {
+        t.equal(err, null, 'no error');
+        t.equal(verifyRedirect(t, resp), '/signup', 'failed to recreate user');
+        t.done();
+    });
+  },
+
+  signupSuccess: function (t) {
+    var url = root + '/signup';
+    request.post(url,
+      { form: { username: 'newuser', email: 'me@hax.net', password: 'wootinator'} },
+      function (err, resp, body) {
+        t.equal(err, null, 'no error');
+        t.equal(verifyRedirect(t, resp), '/profile', 'managed to sign up');
+        t.done();
+    });
+  },
+
+  signupNoEmail: function (t) {
+    var url = root + '/signup';
+    request.post(url,
+      { form: { username: 'newuser2', password: 'wootinator'} },
+      function (err, resp, body) {
+        t.equal(err, null, 'no error');
+        t.equal(verifyRedirect(t, resp), '/signup', 'failed to sign up');
         t.done();
     });
   },

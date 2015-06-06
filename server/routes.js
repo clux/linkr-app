@@ -15,15 +15,34 @@ module.exports = function (app, passport) {
     });
   });
 
-  // signup / login / logout
-  app.post('/signup', passport.authenticate('local-signup', {
-    successRedirect : '/profile', // redirect to the secure profile section
-    failureRedirect : '/signup', // redirect to signup on error
-  }));
-  app.post('/login', passport.authenticate('local-login', {
-    successRedirect : '/profile', // redirect to the secure profile section
-    failureRedirect : '/login', // redirect to signup on error
-  }));
+  // signup / login
+  app.post('/signup', function (req, res, next) {
+    passport.authenticate('local-signup', function (err, user, info) {
+      if (err) { return next(err); }
+      if (!user) {
+        console.log(info.message);
+        return res.redirect('/signup');
+      }
+      req.logIn(user, function (err) {
+        if (err) { return next(err); }
+        return res.redirect('/profile');
+      });
+    })(req, res, next);
+  });
+  app.post('/login', function (req, res, next) {
+    passport.authenticate('local-login', function (err, user, info) {
+      if (err) { return next(err); }
+      if (!user) {
+        console.log(info.message);
+        return res.redirect('/login');
+      }
+      req.logIn(user, function (err) {
+        if (err) { return next(err); }
+        return res.redirect('/profile');
+      });
+    })(req, res, next);
+  });
+
 
   // TODO: get messages in there!
   // currently they are lost because we redirect
