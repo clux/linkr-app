@@ -20,20 +20,29 @@ app.engine('ejs', require('ejs-locals'));
 
 // security
 app.disable('x-powered-by');
-// prevent page being put in iframes
+
+// prevent clickjacking
 app.use(helmet.frameguard('deny'));
-// CSP - may need tweaking for CSRF + android use
+
+// disable mime type inferral of scripts (specify the language in script tag!)
+app.use(helmet.nosniff());
+
+/**
+ * CSP
+ *
+ * currently disabled since it's a bit of a pain
+ * Know we will need:
+ *  -scriptSrc: ["'self'", "'unsafe-inline'"] for inline src init of linkr-list
+ *  -styleSrc: ["'self'", "'unsafe-inline'"] for inline styles if we want this..
+ * something else to allow doing the link rel import of the vulcanized set..
+ * see https://github.com/helmetjs/helmet
+ */
 //app.use(helmet.contentSecurityPolicy({
-//  defaultSrc: ["'self'", "'unsafe-inline'", 'localhost'],
 //  sandbox: ['allow-forms', 'allow-scripts'],
-//  reportUri: '/report',
+//  reportUri: '/report', // TODO: tune when adding CSURF
 //  reportOnly: false, // set to true if you only want to report errors
 //}));
-// TODO: style-src 'self' data: chrome-extension-resource: 'unsafe-inline'; ?
-// should be allowed since unsafe-inline is allowed everywhere
 
-// cross domain policy
-app.use(helmet.crossdomain());
 // disable cache while developing
 app.use(helmet.noCache());
 
