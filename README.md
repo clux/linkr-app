@@ -7,7 +7,7 @@
 A link sharing site built on top of express, postgresql, and polymer based web components using local passport authentication.
 
 ## Install
-Ensure you have node, postgres and bower installed. Then clone and install dependencies:
+Intall node, postgres and bower. Then clone, install dependencies, and start:
 
 ```sh
 git clone git@github.com:clux/linkr-app.git
@@ -16,5 +16,5 @@ npm install
 npm build
 # create a postgres database, and expose its location:
 export DATABASE_URL=postgres://localhost:5432/testdb
-npm start
+npm start # alternatively, pm2 start app.js
 ```

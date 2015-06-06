@@ -20,7 +20,9 @@ module.exports = function (app, passport) {
     passport.authenticate('local-signup', function (err, user, info) {
       if (err) { return next(err); }
       if (!user) {
-        console.log(info.message);
+        if (!process.env.LINKR_COV) {
+          console.log(info.message); // TODO: pass on info with ajax instead
+        }
         return res.redirect('/signup');
       }
       req.logIn(user, function (err) {
@@ -33,7 +35,9 @@ module.exports = function (app, passport) {
     passport.authenticate('local-login', function (err, user, info) {
       if (err) { return next(err); }
       if (!user) {
-        console.log(info.message);
+        if (!process.env.LINKR_COV) {
+          console.log(info.message); // TODO: pass on info with ajax instead
+        }
         return res.redirect('/login');
       }
       req.logIn(user, function (err) {

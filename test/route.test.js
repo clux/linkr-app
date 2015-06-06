@@ -34,7 +34,7 @@ module.exports = {
   loginWrongUser: function (t) {
     var url = root + '/login';
     request.post(url, { form: { username: 'whoisthisguy', password: 'bah'} },
-      function (err, resp, body) {
+      function (err, resp) {
         t.equal(err, null, 'no error');
         t.equal(verifyRedirect(t, resp), '/login', 'failed to log in');
         t.done();
@@ -44,7 +44,7 @@ module.exports = {
   loginWrongPassword: function (t) {
     var url = root + '/login';
     request.post(url, { form: { username: 'clux', password: 'notright'} },
-      function (err, resp, body) {
+      function (err, resp) {
         t.equal(err, null, 'no error');
         t.equal(verifyRedirect(t, resp), '/login', 'failed to log in');
         t.done();
@@ -54,7 +54,7 @@ module.exports = {
   loginValid: function (t) {
     var url = root + '/login';
     request.post(url, { form: { username: 'clux', password: 'heythere'} },
-      function (err, resp, body) {
+      function (err, resp) {
         t.equal(err, null, 'no error');
         t.equal(verifyRedirect(t, resp), '/profile', 'managed to log in');
         t.done();
@@ -65,7 +65,7 @@ module.exports = {
     var url = root + '/signup';
     request.post(url,
       { form: { username: 'clux', email: 'me@hax.net', password: 'heythere'} },
-      function (err, resp, body) {
+      function (err, resp) {
         t.equal(err, null, 'no error');
         t.equal(verifyRedirect(t, resp), '/signup', 'failed to recreate user');
         t.done();
@@ -76,7 +76,7 @@ module.exports = {
     var url = root + '/signup';
     request.post(url, { form:
       { username: 'newuser', email: 'me@hax.net', password: ''} },
-      function (err, resp, body) {
+      function (err, resp) {
         t.equal(err, null, 'no error');
         t.equal(verifyRedirect(t, resp), '/signup', 'failed to recreate user');
         t.done();
@@ -87,7 +87,7 @@ module.exports = {
     var url = root + '/signup';
     request.post(url,
       { form: { username: 'newuser', email: 'me@hax.net', password: 'wootinator'} },
-      function (err, resp, body) {
+      function (err, resp) {
         t.equal(err, null, 'no error');
         t.equal(verifyRedirect(t, resp), '/profile', 'managed to sign up');
         t.done();
@@ -98,7 +98,7 @@ module.exports = {
     var url = root + '/signup';
     request.post(url,
       { form: { username: 'newuser2', password: 'wootinator'} },
-      function (err, resp, body) {
+      function (err, resp) {
         t.equal(err, null, 'no error');
         t.equal(verifyRedirect(t, resp), '/signup', 'failed to sign up');
         t.done();
