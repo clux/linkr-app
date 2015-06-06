@@ -1,7 +1,7 @@
 {
   "name": "linkr-app",
   "author": "Eirik Albrigtsen <analsandblaster@gmail.com>",
-  "description": "A small personal express server",
+  "description": "Link sharing express server with web components",
   "private": true,
   "repository": {
     "type": "git",
