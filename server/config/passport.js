@@ -8,56 +8,56 @@ var opts = {
   passReqToCallback: true // get req as first arg to cb if true
 };
 
-var localLogin = new LocalStrat(opts, function (req, name, pw, done) {
+var localLogin = new LocalStrat(opts, function (req, name, pw, cb) {
   User.findUserByName(name, function (err, user) {
-    if (err) { return done(err); }
+    if (err) { return cb(err); }
     if (!user) {
-      return done(null, null, { message: 'No user "' + name + '" found' });
+      return cb(null, null, { message: 'No user "' + name + '" found' });
     }
     User.comparePassword(pw, user.hash, function (err, res) {
       if (err) {
-        return done(err);
+        return cb(err);
       }
       if (!res) {
-        return done(null, null, { message: 'Wrong password' });
+        return cb(null, null, { message: 'Wrong password' });
       }
-      done(null, user);
+      cb(null, user);
     });
   });
 });
 
-var localSignup = new LocalStrat(opts, function (req, name, pw, done) {
+var localSignup = new LocalStrat(opts, function (req, name, pw, cb) {
   User.findUserByName(name, function (err, user) {
     if (err) {
-      return done(err);
+      return cb(err);
     }
     if (user) {
-      return done(null, null, { message: 'User already exists' });
+      return cb(null, null, { message: 'User already exists' });
     }
     var email = req.body.email;
     if (!email) {
-      return done(null, null, { message: 'Missing email' });
+      return cb(null, null, { message: 'Missing email' });
     }
     // TODO: validate that email does not exist so we avoid unique constraint error?
-    //Users.findUserByEmail()
+    // would need to implement Users.findUserByEmail() - but is it actually better?
 
     User.createUser(name, email, pw, function (err, user) {
       if (err) {
-        return done(err);
+        return cb(err);
       }
-      return done(null, user);
+      return cb(null, user);
     });
   });
 });
 
 module.exports = function (passport) {
-  passport.serializeUser(function (user, done) {
-    done(null, user.id);
+  passport.serializeUser(function (user, cb) {
+    cb(null, user.id);
   });
 
-  passport.deserializeUser(function (id, done) {
+  passport.deserializeUser(function (id, cb) {
     User.findUserById(id, function (err, user) {
-      done(err, user);
+      cb(err, user);
     });
   });
 
