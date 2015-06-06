@@ -9,40 +9,37 @@ var opts = {
 };
 
 var localLogin = new LocalStrat(opts, function (req, name, pw, done) {
-  process.nextTick(function () {
-    User.findUserByName(name, function (err, user) {
-      if (err) { return done(err); }
-      if (!user) {
-        return done(null, false, { message: 'No user "' + name + '" found' });
+  User.findUserByName(name, function (err, user) {
+    if (err) { return done(err); }
+    if (!user) {
+      return done(null, false, { message: 'No user "' + name + '" found' });
+    }
+    User.comparePassword(pw, user.hash, function (err, res) {
+      if (err) {
+        return done(err);
       }
-      User.comparePassword(pw, user.hash, function (err, res) {
-        if (err) {
-          return done(err);
-        }
-        if (!res) {
-          return done(null, false, { message: 'Wrong password' });
-        }
-        done(null, user);
-      });
+      if (!res) {
+        return done(null, false, { message: 'Wrong password' });
+      }
+      done(null, user);
     });
   });
 });
 
 var localSignup = new LocalStrat(opts, function (req, name, pw, done) {
-  process.nextTick(function () {
-    User.findUserByName(name, function (err, user) {
+  User.findUserByName(name, function (err, user) {
+    if (err) {
+      return done(err);
+    }
+    if (user) {
+      return done(null, false, { message: 'User already exists' });
+    }
+    // TODO: need to pass email through here somehow..
+    User.createUser(name, 'test@bah.com', pw, function (err, user) {
       if (err) {
         return done(err);
       }
-      if (user) {
-        return done(null, false, { message: 'User already exists' });
-      }
-      User.createUser(name, 'test@bah.com', pw, function (err, user) {
-        if (err) {
-          return done(err);
-        }
-        return done(null, user);
-      });
+      return done(null, user);
     });
   });
 });

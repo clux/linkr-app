@@ -2,7 +2,7 @@ var User = require('./db').User;
 
 exports.findUserByName = function (username, cb) {
   User.findOne({ where: { username: username }}).then(function (user) {
-    cb(null, user.get());
+    cb(null, user ? user.get() : null);
   }).catch(function (err) {
     cb(err);
   });
