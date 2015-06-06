@@ -6,8 +6,8 @@ addons:
   postgresql: "9.3"
 
 before_script:
-  - psql -c 'create database travis-linkr;' -U postgres
-  - export DATABASE_URL=postgres://postgres@localhost:5432/travis-linkr
+  - psql -c 'create database travis_linkr;' -U postgres
+  - export DATABASE_URL=postgres://postgres@localhost:5432/travis_linkr
 
 notifications:
   email: true
