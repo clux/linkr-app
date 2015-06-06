@@ -9,7 +9,9 @@
   },
   "version": "0.0.0",
   "scripts": {
-    "build": "./build.sh",
+    "build-wc": "./build.sh",
+    "build-db": "./init_db.js",
+    "build": "npm run build-wc && npm run build-db",
     "start": "node app.js",
     "test": "nodeunit test/*.test.js --reporter=verbose",
     "coverage": "jscoverage server && LINKR_COV=1 nodeunit --reporter=lcov test/*.test.js",
@@ -17,6 +19,7 @@
   },
   "main": "server",
   "dependencies": {
+    "bcrypt": "^0.8.3",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.12.0",
     "cookie-parser": "^1.3.4",

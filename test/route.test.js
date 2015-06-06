@@ -2,6 +2,8 @@ var linkr = require(process.env.LINKR_COV ? '../server-cov/' : '../server/');
 var request = require('request');
 var http = require('http');
 
+var root = 'http://localhost:8000/';
+
 module.exports = {
   setUp: function (cb) {
     this.server = http.createServer(linkr);
@@ -14,7 +16,7 @@ module.exports = {
   },
 
   getRoot: function (t) {
-    request('http://localhost:8000/', function (err, resp, body) {
+    request(root, function (err, resp, body) {
       t.equal(err, null, 'no error');
       t.equal(resp.statusCode, 200, '200 OK');
       t.ok(body.length > 100, "some data returned");

@@ -1,4 +1,5 @@
 var LocalStrat = require('passport-local').Strategy;
+
 var User = require('../models/user');
 
 var opts = {
@@ -9,28 +10,37 @@ var opts = {
 
 var localLogin = new LocalStrat(opts, function (req, name, pw, done) {
   process.nextTick(function () {
-    User.findByUsername(name, function (err, user) {
+    User.findUserByName(name, function (err, user) {
       if (err) { return done(err); }
       if (!user) {
         return done(null, false, { message: 'No user "' + name + '" found' });
       }
-      if (!User.correctPassword(user.hash, pw)) {
-        return done(null, false, { message: 'Wrong password' });
-      }
-      return done(null, user);
+      User.comparePassword(pw, user.hash, function (err, res) {
+        if (err) {
+          return done(err);
+        }
+        if (!res) {
+          return done(null, false, { message: 'Wrong password' });
+        }
+        done(null, user);
+      });
     });
   });
 });
 
 var localSignup = new LocalStrat(opts, function (req, name, pw, done) {
   process.nextTick(function () {
-    User.findByUsername(name, function (err, user) {
-      if (err) { return done(err); }
+    User.findUserByName(name, function (err, user) {
+      if (err) {
+        return done(err);
+      }
       if (user) {
         return done(null, false, { message: 'User already exists' });
       }
-      User.save(name, pw, function (err, user) {
-        if (err) { throw err; }
+      User.createUser(name, 'test@bah.com', pw, function (err, user) {
+        if (err) {
+          return done(err);
+        }
         return done(null, user);
       });
     });
@@ -43,11 +53,11 @@ module.exports = function (passport) {
   });
 
   passport.deserializeUser(function (id, done) {
-    User.findById(id, function(err, user) {
+    User.findUserById(id, function(err, user) {
       done(err, user);
     });
   });
 
-  passport.use('local-signup', localSignup); 
-  passport.use('local-login', localLogin); 
+  passport.use('local-signup', localSignup);
+  passport.use('local-login', localLogin);
 };

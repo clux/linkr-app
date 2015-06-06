@@ -1,4 +1,4 @@
-var db = require('./db');
+var LinksHelper = require('./models/links');
 
 var isLoggedIn = function (req, res, next) {
   if (req.isAuthenticated()) {
@@ -10,7 +10,7 @@ var isLoggedIn = function (req, res, next) {
 module.exports = function (app, passport) {
   // main
   app.get('/', function (req, res) {
-    db.findAll(50, 0, function (err, data) {
+    LinksHelper.findPage(50, 0, function (err, data) {
       res.render('index.ejs', { user: req.user, links: data });
     });
   });

@@ -1,6 +1,5 @@
 #!/bin/sh
-sudo apt-get install postgresql-9.4
-sudo apt-get install postgresql-contrib-9.4
+sudo apt-get install postgresql-9.4 postgresql-contrib-9.4
 pg_isready
 #sudo -u postgres psql # maybe set root \password in here
 sudo -u postgres createuser $USER --pwprompt # enter PASSWORD

@@ -1,40 +1,34 @@
-var bcrypt = require('bcrypt-nodejs');
+var User = require('./db').User;
 
-var generateHash = function (pw) {
-  return bcrypt.hashSync(pw, bcrypt.genSaltSync(8), null);
+exports.findUserByName = function (username, cb) {
+  User.findOne({ where: { username: username }}).then(function (user) {
+    cb(null, user.get());
+  }).catch(function (err) {
+    cb(err);
+  });
 };
 
-exports.correctPassword = function (hash, pw) {
-  return bcrypt.compareSync(pw, hash);
+exports.findUserById = function (id, cb) {
+  User.findOne({ where: { id: id }}).then(function (user) {
+    cb(null, user.get());
+  }).catch(function (err) {
+    cb(err);
+  });
 };
 
-var users = [
-  { id: 1, username: 'bob', hash: generateHash('secret') },
-  { id: 2, username: 'joe', hash: generateHash('birthday') }
-];
-
-exports.findById = function (id, cb) {
-  // hacky lookup (id == idx+1)
-  if (users[id-1]) {
-    cb(null, users[id-1]);
-  }
-  else {
-    cb(new Error('User ' + id + ' does not exist'));
-  }
-};
-
-exports.findByUsername = function (name, cb) {
-  for (var i = 0, len = users.length; i < len; i += 1) {
-    var u = users[i];
-    if (u.username === name) {
-      return cb(null, u);
+var bcrypt = require('bcrypt');
+exports.createUser = function (username, email, password, cb) {
+  // generate a hash with a length 10 salt prepended and discard the password
+  bcrypt.hash(password, 10, function (err, hash) {
+    if (err) {
+      return cb(err);
     }
-  }
-  return cb(null, null); // TODO: no error here?
+    User.create({ username: username, email: email, hash: hash }).then(function (u) {
+      cb(null, u.get());
+    }).catch(function (err) {
+      cb(err);
+    });
+  });
 };
 
-exports.save = function (name, pw,  cb) {
-  var u = { id: 3, username: name, hash: generateHash(pw) };
-  users.push(u);
-  cb(null, u);
-};
+exports.comparePassword = bcrypt.compare; // password, hash, cb
