@@ -1,6 +1,6 @@
 var Sequelize = require('sequelize');
 var sequelize = new Sequelize(process.env.DATABASE_URL, {
-  logging: !process.env.LINKR_COV // log unless we are measuring coverage
+  logging: process.env.LINKR_COV ? false : console.log
 });
 
 var User = sequelize.define('User', {
