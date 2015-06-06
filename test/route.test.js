@@ -1,16 +1,16 @@
-var app = require(process.env.LINKR_COV ? '../server-cov/' : '../server/');
+var linkr = require(process.env.LINKR_COV ? '../server-cov/' : '../server/');
 var request = require('request');
 var http = require('http');
 
 module.exports = {
   setUp: function (cb) {
-    this.server = http.createServer(app);
+    this.server = http.createServer(linkr);
     this.server.listen(8000);
-    cb();
+    setTimeout(cb, 2000); // allow db to get synced
   },
   tearDown: function (cb) {
     this.server.close();
-    cb();
+    cb(); // NB: takes 5s or so for pool to drop
   },
 
   getRoot: function (t) {

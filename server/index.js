@@ -74,4 +74,5 @@ app.use(passport.session());
 // initialize routes
 require('./routes.js')(app, passport);
 
+// for tests
 module.exports = app;

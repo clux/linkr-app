@@ -1,3 +1,5 @@
+var db = require('./db');
+
 var isLoggedIn = function (req, res, next) {
   if (req.isAuthenticated()) {
     return next();
@@ -8,12 +10,9 @@ var isLoggedIn = function (req, res, next) {
 module.exports = function (app, passport) {
   // main
   app.get('/', function (req, res) {
-    res.render('index.ejs', { user: req.user, links: [] });
-  });
-
-  app.post('/report', function (req, res) {
-    console.log('CSP Violation from', req.headers.referer);
-    res.sendStatus(200).end();
+    db.findAll(50, 0, function (err, data) {
+      res.render('index.ejs', { user: req.user, links: data });
+    });
   });
 
   // signup / login / logout
@@ -39,7 +38,7 @@ module.exports = function (app, passport) {
     req.logout();
     res.redirect('/');
   });
-  
+
   // authenticated areas
   app.get('/profile', isLoggedIn, function (req, res) {
     res.render('profile.ejs', { user : req.user });

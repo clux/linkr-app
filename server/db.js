@@ -6,19 +6,19 @@ var Link = sequelize.define('Link', {
     type: Sequelize.STRING(100),
     validate: { notEmpty: true }
   },
-  link: {
+  url: {
     type: Sequelize.STRING(200),
     validate: { isUrl: true, notEmpty: true }
   },
   category: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.STRING(16),
     defaultValue: 0,
-    validate: { min: 0, max: 10 }
+    validate: { isAlpha: true }
   },
   // TODO: username link + comments
 });
 
-var User = sequelize.define('User', {
+/*var User = sequelize.define('User', {
   //indexes: {
   //  unique: true,
   //  fields: [ 'email' ]
@@ -34,22 +34,25 @@ var User = sequelize.define('User', {
 });
 
 Link.belongsTo(User, {foreignKey: 'fk_user'});
-
+*/
 
 sequelize.sync({ force: true }).then(function() {
   Link.bulkCreate([
-    { title: 'sequelize',  link: 'http://docs.sequelizejs.com/' },
-    { title: 'clux',  link: 'http://clux.org/' }
+    { title: 'sequelize',  url: 'http://docs.sequelizejs.com/', category: 'cool' },
+    { title: 'clux',  url: 'http://clux.org/', category: 'beautiful' }
   ]);
 });
 
-// pagainator
 exports.findAll = function (limit, offset, cb) {
   Link.findAll({ limit: limit, offset: offset, raw: true }).then(function (links) {
     cb(null, links);
   }).catch(function (err) {
     cb(err);
   });
+};
+
+exports.close = function () {
+  sequelize.close();
 };
 
 if (module === require.main) {

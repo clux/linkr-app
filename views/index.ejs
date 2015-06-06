@@ -4,10 +4,10 @@
 <h2>Welcome, <%= user ? user.username : 'anonymous' %>!</h2>
 
 <ul id="#links" is="linkr-list"></ul>
-<ice-breaker></ice-breaker>
+<ice-breaker style="display:none"></ice-breaker>
 <script>
   // TODO: refine selector..
   var list = document.querySelector("ul");
   list.links = <%-JSON.stringify(links)%>;
-  document.querySelector('ice-breaker').style.display = 'none';
+  //document.querySelector('ice-breaker').style.display = 'block';
 </script>
