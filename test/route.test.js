@@ -8,7 +8,7 @@ module.exports = {
   setUp: function (cb) {
     this.server = http.createServer(linkr);
     this.server.listen(8000);
-    setTimeout(cb, 2000); // allow db to get synced
+    cb();
   },
   tearDown: function (cb) {
     this.server.close();
