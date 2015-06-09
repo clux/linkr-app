@@ -1,5 +1,8 @@
 var pg = require('pg');
 var url = process.env.DATABASE_URL;
+if (!url) {
+  throw new Error("Need to set DATABASE_URL");
+}
 
 var query = function (query, cb) {
   pg.connect(url, function (err, client, done) {
