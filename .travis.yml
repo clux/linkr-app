@@ -1,13 +1,15 @@
 language: node_js
 node_js:
-  - 0.10
+  - iojs
 
 addons:
   postgresql: "9.4"
 
 before_script:
+  - openssl genrsa -out server.rsa 2048
+  - openssl rsa -in server.rsa -pubout > server.rsa.pub
   - psql -c 'create database travis_linkr;' -U postgres
-  - export DATABASE_URL=postgres://postgres@localhost:5432/travis_linkr
+  - export DATABASE_URL=postgres://postgres@localhost:5432/travis_koa
   - npm install bower -g
   - bower install
   - npm run build
