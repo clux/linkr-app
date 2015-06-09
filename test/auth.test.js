@@ -1,6 +1,8 @@
-var tape = require('tape')
+var tape = require('tape');
 var co = require('co');
-var test = function (name, fn) {
+var cs = require('co-stream');
+
+var tapeRun = function (name, fn) {
   var wrapped = function (t) {
     co(function *() {
       yield fn(t);
@@ -9,7 +11,7 @@ var test = function (name, fn) {
       t.error(err, err.message);
     });
   };
-  tape.test(name, wrapped);
+  return cs.wait(tape.test(name, wrapped));
 };
 
 /*test('co-tape failures', function *(t) {
@@ -21,10 +23,18 @@ var test = function (name, fn) {
   t.end();
 });*/
 
+// run all tests sequentially
+var testAll = function (obj) {
+  return Object.keys(obj).map(function *(key) {
+    var fn = obj[key];
+    yield tapeRun(key, fn);
+  });
+};
 
-var server = require('../');
+
+var app = require('../');
 var request = require('co-request');
-var url = 'http://localhost:8000'
+var url = 'http://localhost:8000';
 
 
 var verifyForbidden = function *(t, type, location, loginData) {
@@ -34,23 +44,30 @@ var verifyForbidden = function *(t, type, location, loginData) {
   t.ok(!body.success, 'failed to ' + type.toUpperCase() + ' ' + location + creds);
   t.ok(body.reason, 'forbidden', 'forbidden');
 };
-test('no access to jwt gated routes', function *(t) {
+
+var tests = {};
+tests['can only reach login'] = function *(t) {
+  var res = yield request(url + '/');
+  t.equal(res.statusCode, 200, 'GET / => 200 OK');
+};
+
+tests['forbidden beyond auth guard'] = function *(t) {
   yield verifyForbidden(t, 'get', '/links');
-});
+};
 
-test('fail to log in without post data', function *(t) {
+tests['forbidden login without_body'] = function *(t) {
   yield verifyForbidden(t, 'post', '/login', {});
-});
+};
 
-test('fail to log in without correct password', function *(t) {
+tests['fail to log in without correct password'] = function *(t) {
   var badCreds = { user: 'clux', password: 'a' };
   yield verifyForbidden(t, 'post', '/login', badCreds);
-});
+};
 
-test('fail to log in with missing user', function *(t) {
+tests['fail to log in with missing user'] = function *(t) {
   var badCreds = { user: 'arstrastasrt', password: 'a' };
   yield verifyForbidden(t, 'post', '/login', badCreds);
-});
+};
 
 // ----------------------------------------------------------------------------
 var authenticate = function *(t) {
@@ -62,6 +79,16 @@ var authenticate = function *(t) {
   return body.token;
 };
 
-test('authenticate', function *(t) {
-  var token = yield authenticate(t);
+var token = null; // reuse after auth
+
+tests.authenticate = function *(t) {
+  token = yield authenticate(t);
+};
+
+// ----------------------------------------------------------------------------
+
+co(function *() {
+  var server = app.listen(8000);
+  var res = yield *testAll(tests);
+  server.close();
 });

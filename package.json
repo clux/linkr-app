@@ -8,7 +8,7 @@
     "type": "git",
     "url": "clux/linkr-app"
   },
-  "main": "server/index.js",
+  "main": "server",
   "scripts": {
     "build-wc": "./build.sh",
     "build-db": "./init_db.js",
@@ -37,10 +37,9 @@
   "devDependencies": {
     "co": "^4.5.4",
     "co-request": "^0.2.1",
+    "co-stream": "^0.1.0",
     "coveralls": "^2.11.2",
     "istanbul-harmony": "^0.3.12",
-    "jscoverage": "^0.5.9",
-    "nodeunit": "^0.9.1",
     "tape": "^4.0.0",
     "vulcanize": "^1.8.1"
   }
