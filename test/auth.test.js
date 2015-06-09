@@ -26,6 +26,7 @@ var server = require('../');
 var request = require('co-request');
 var url = 'http://localhost:8000'
 
+
 var verifyForbidden = function *(t, type, location, loginData) {
   var res = yield request[type]({url: url + location, json: loginData || {} });
   var body = res.body;

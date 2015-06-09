@@ -14,8 +14,8 @@ before_script:
   - bower install
   - npm run build
 
-notifications:
-  email: true
+script:
+  - ./test.sh
 
 after_script:
   - npm run coveralls
