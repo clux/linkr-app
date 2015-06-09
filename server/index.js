@@ -1,89 +1,40 @@
-var express = require('express')
-  , cookieParser = require('cookie-parser')
-  , bodyParser = require('body-parser')
-  , session = require('express-session')
-  , passport = require('passport')
-  , helmet = require('helmet')
-  , morgan = require('morgan')
-  , join = require('path').join
-  ;
+var koa = require('koa');
+var route = require('koa-route');
+var logger = require('koa-logger');
+var mount = require('koa-mount');
+var serve = require('koa-static');
+var postApp = require('./routes');
+var auth = require('./auth');
 
-require('./config/passport')(passport);
+var app = koa();
+app.use(logger());
 
-// set up our express application
-var app = express();
 
-// set up ejs for templating
-app.set('views', __dirname + '/../views');
-app.set('view engine', 'ejs');
-app.engine('ejs', require('ejs-locals'));
+// NB: this serves favicon.ico as well - not sure if that's problematic
+app.use(serve('./assets')); // TODO: compress these
 
-// security
-app.disable('x-powered-by');
-
-// prevent clickjacking
-app.use(helmet.frameguard('deny'));
-
-// disable mime type inferral of scripts (specify the language in script tag!)
-app.use(helmet.nosniff());
-
-/**
- * CSP
- *
- * currently disabled since it's a bit of a pain
- * Know we will need:
- *  -scriptSrc: ["'self'", "'unsafe-inline'"] for inline src init of linkr-list
- *  -styleSrc: ["'self'", "'unsafe-inline'"] for inline styles if we want this..
- * something else to allow doing the link rel import of the vulcanized set..
- * see https://github.com/helmetjs/helmet
- */
-//app.use(helmet.contentSecurityPolicy({
-//  sandbox: ['allow-forms', 'allow-scripts'],
-//  reportUri: '/report', // TODO: tune when adding CSURF
-//  reportOnly: false, // set to true if you only want to report errors
-//}));
-
-// disable cache while developing
-app.use(helmet.noCache());
-
-// serve static files
-app.use(express.static(join(__dirname, '..', 'assets')));
-
-// log every request to the console unless we are measuring coverage
-if (!process.env.LINKR_COV) {
-  app.use(morgan('dev'));
-}
-
-// read cookies for auth
-app.use(cookieParser());
-
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }));
-// parse application/json
-app.use(bodyParser.json());
-
-// session middleware
-app.use(session({
-  secret: 'knickknackpaddywhackgiveacorrecthorseabatterystaple',
-  resave: false,
-  saveUninitialized: true
-}));
-
-// passport using persistent login sessions
-app.use(passport.initialize());
-app.use(passport.session());
-
-// initialize routes
-require('./routes.js')(app, passport);
-
-// NB: express magic: this function breaks without next in its parameter list
-app.use(function ErrorHandler(err, req, res, next) { // ignore lint error!
-  if (!process.env.LINKR_COV) {
-    console.error(err.stack);
+// error handling - first needed for stuff below here probably
+app.use(function *(next) {
+  try { yield next; }
+  catch(e) {
+    //console.log(e.message);
+    if (e.status === 401 ) { // auth guard
+      this.status = e.status;
+      this.body = { success: false, reason: 'Forbidden' };
+    }
+    else {
+      console.log(e.message);
+      throw e; // unhandled for now - pass it on
+    }
   }
-  res.status(500).send('500');
 });
 
+// app entrypoint
+app.use(route.get('/', auth.getLogin));
+app.use(route.post('/login', auth.postLogin));
+app.use(auth.guard);
 
-// for tests
+// secure sub-app
+app.use(mount('/links', postApp));
+
 module.exports = app;

@@ -1,69 +1,31 @@
-var LinksHelper = require('./models/links');
+var kr = require('koa-route');
+var parse = require('co-body');
+var koa = require('koa');
+var Link = require('./db').Link;
 
-var isLoggedIn = function (req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect('/');
+// TODO: js language for sublime probably outdated..
+
+var list = function *() {
+  var links = yield Link.findAll({ limit: 10, offset: 0 });
+  this.body = { links: links };
 };
 
-module.exports = function (app, passport) {
-  // main
-  app.get('/', function (req, res) {
-    LinksHelper.findPage(50, 0, function (err, data) {
-      res.render('index.ejs', { user: req.user, links: data });
-    });
-  });
-
-  // signup / login
-  app.post('/signup', function (req, res, next) {
-    passport.authenticate('local-signup', function (err, user, info) {
-      if (err) { return next(err); }
-      if (!user) {
-        if (!process.env.LINKR_COV) {
-          console.log(info.message); // TODO: pass on info with ajax instead
-        }
-        return res.redirect('/signup');
-      }
-      req.logIn(user, function (err) {
-        if (err) { return next(err); }
-        return res.redirect('/profile');
-      });
-    })(req, res, next);
-  });
-  app.post('/login', function (req, res, next) {
-    passport.authenticate('local-login', function (err, user, info) {
-      if (err) { return next(err); }
-      if (!user) {
-        if (!process.env.LINKR_COV) {
-          console.log(info.message); // TODO: pass on info with ajax instead
-        }
-        return res.redirect('/login');
-      }
-      req.logIn(user, function (err) {
-        if (err) { return next(err); }
-        return res.redirect('/profile');
-      });
-    })(req, res, next);
-  });
-
-
-  // TODO: get messages in there!
-  // currently they are lost because we redirect
-  // would have to use connect-flash or AJAX to get them..
-  app.get('/signup', function (req, res) {
-    res.render('signup.ejs', { user: req.user, message: '' });
-  });
-  app.get('/login', function (req, res) {
-    res.render('login.ejs', { user: req.user, message: '' });
-  });
-  app.get('/logout', function (req, res) {
-    req.logout();
-    res.redirect('/');
-  });
-
-  // authenticated areas
-  app.get('/profile', isLoggedIn, function (req, res) {
-    res.render('profile.ejs', { user : req.user });
-  });
+var show = function *(id) {
+  var link = yield Link.findOne({ where: { id: id } });
+  if (!link) { this.throw(404, 'invalid id'); }
+  this.body = { link: link };
 };
+
+var create = function *() {
+  var l = yield parse(this);
+  var link = yield Link.create(l);
+  this.body = { success: true, data: link };
+};
+
+var app = koa();
+
+app.use(kr.get('/:id', show));
+app.use(kr.get('/', list));
+app.use(kr.post('/', create));
+
+module.exports = app;
