@@ -3,8 +3,6 @@ var parse = require('co-body');
 var koa = require('koa');
 var Link = require('./db').Link;
 
-// TODO: js language for sublime probably outdated..
-
 var list = function *() {
   var links = yield Link.findAll({ limit: 10, offset: 0 });
   this.body = { links: links };
@@ -18,7 +16,8 @@ var show = function *(id) {
 
 var create = function *() {
   var l = yield parse(this);
-  var link = yield Link.create(l);
+  //var link = yield Link.create(l); // TODO: insert with user
+  var link = l;
   this.body = { success: true, data: link };
 };
 

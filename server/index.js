@@ -7,8 +7,8 @@ var postApp = require('./routes');
 var auth = require('./auth');
 
 var app = koa();
-app.use(logger());
 
+app.use(logger());
 
 // NB: this serves favicon.ico as well - not sure if that's problematic
 app.use(serve('./assets')); // TODO: compress these

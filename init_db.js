@@ -29,4 +29,5 @@ var main = function *() {
 
 co(main).catch(function (e) {
   console.error(e);
+  process.exit(1);
 });

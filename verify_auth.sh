@@ -12,6 +12,7 @@ test "$success" = "true" || abort login failed
 TOKEN=$(echo "$res" | json token)
 echo "With auth:"
 curl -X GET -H "Authorization: Bearer $TOKEN" localhost:8000/links -I
+#curl -X POST -H "Authorization: Bearer $TOKEN" localhost:8000/links -d '{}'
 
 echo "Without auth:"
 curl -X GET localhost:8000/links

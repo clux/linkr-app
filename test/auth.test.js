@@ -1,44 +1,13 @@
-var tape = require('tape');
-var co = require('co');
-var cs = require('co-stream');
-
-var tapeRun = function (name, fn) {
-  var wrapped = function (t) {
-    co(function *() {
-      yield fn(t);
-      t.end();
-    }).catch(function (err) {
-      t.error(err, err.message);
-    });
-  };
-  return cs.wait(tape.test(name, wrapped));
-};
-
-/*test('co-tape failures', function *(t) {
-  var v = yield Promise.resolve(false);
-  t.ok(v, 'bad');
-  throw new Error('lets throw an error');
-  t.ok(l, 'woot');
-  t.ok(true, 'heyo');
-  t.end();
-});*/
-
-// run all tests sequentially
-var testAll = function (obj) {
-  return Object.keys(obj).map(function *(key) {
-    var fn = obj[key];
-    yield tapeRun(key, fn);
-  });
-};
-
-
+var tape = require('./cotape');
+var co = require('co'); // for running, should be moved into cotape somehow?
 var app = require('../');
 var request = require('co-request');
 var url = 'http://localhost:8000';
 
+// ----------------------------------------------------------------------------
 
 var verifyForbidden = function *(t, type, location, loginData) {
-  var res = yield request[type]({url: url + location, json: loginData || {} });
+  var res = yield request[type]({uri: url + location, json: loginData || {} });
   var body = res.body;
   var creds = ' with body ' + JSON.stringify(loginData || {});
   t.ok(!body.success, 'failed to ' + type.toUpperCase() + ' ' + location + creds);
@@ -70,25 +39,45 @@ tests['fail to log in with missing user'] = function *(t) {
 };
 
 // ----------------------------------------------------------------------------
+
 var authenticate = function *(t) {
-  var auth = {username: 'clux', password: 'heythere' };
-  var res = yield request.post({url: url + '/login', json: auth });
+  var auth = { username: 'clux', password: 'heythere' };
+  var res = yield request.post({ uri: url + '/login', json: auth });
   var body = res.body;
   t.ok(body.success, 'authenticated');
   t.ok(body.token, 'got token');
   return body.token;
 };
 
-var token = null; // reuse after auth
+var opts = { auth: {} }; // reuse after auth;
 
 tests.authenticate = function *(t) {
-  token = yield authenticate(t);
+  var token = yield authenticate(t);
+  opts.auth.bearer = token;
 };
+
+// ----------------------------------------------------------------------------
+
+tests.linksGet = function *(t) {
+  var res = yield request(url + '/links/', opts);
+  t.equal(res.statusCode, 200, 'allowed GET /links/');
+  var data = JSON.parse(res.body);
+  t.ok(Array.isArray(data.links), 'links in body');
+};
+
+//tests.linksPost = function *(t) {
+//  var data = { title: 'cool place', url: 'http://localhost:8000', category: 'cool' };
+//  var res = yield request({ method: 'POST', url: url + '/links/', json: true, data: data }).auth(null, null, true, opts.auth.token);
+//  t.equal(res.statusCode, 200, 'allowed access now');
+//  //var data = JSON.parse(res.body);
+//  //t.ok(Array.isArray(data.links), 'got links back');
+//};
+
 
 // ----------------------------------------------------------------------------
 
 co(function *() {
   var server = app.listen(8000);
-  var res = yield *testAll(tests);
+  yield *tape(tests);
   server.close();
 });
