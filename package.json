@@ -14,9 +14,10 @@
     "build-db": "./init_db.js",
     "build": "npm run build-wc && npm run build-db",
     "start": "node app.js",
-    "test": "tape test/*.test.js",
+    "test": "LINKR_SILENT=1 node test/*.test.js",
+    "testverbose": "node test/*.test.js",
     "precoverage": "istanbul instrument server -o server-cov",
-    "coverage": "istanbul cover test/*.test.js && cat coverage/lcov.info",
+    "coverage": "istanbul cover test/*.test.js > /dev/null && cat coverage/lcov.info",
     "coveralls": "npm run coverage && cat coverage/lcov.info | coveralls"
   },
   "dependencies": {

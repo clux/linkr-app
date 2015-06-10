@@ -3,7 +3,7 @@ if (!process.env.DATABASE_URL) {
 }
 var Sequelize = require('sequelize');
 var sequelize = new Sequelize(process.env.DATABASE_URL, {
-  logging: process.env.LINKR_COV ? false : console.log
+  logging: process.env.LINKR_SILENT ? false : console.log
 });
 
 var User = sequelize.define('User', {
