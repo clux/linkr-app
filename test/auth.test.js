@@ -49,30 +49,36 @@ var authenticate = function *(t) {
   return body.token;
 };
 
-var opts = { auth: {} }; // reuse after auth;
+var auth = {}; // reuse after auth;
 
 tests.authenticate = function *(t) {
   var token = yield authenticate(t);
-  opts.auth.bearer = token;
+  auth.bearer = token;
 };
 
 // ----------------------------------------------------------------------------
 
 tests.linksGet = function *(t) {
-  var res = yield request(url + '/links/', opts);
+  var res = yield request.get({ url: url + '/links/', auth: auth, json: true });
   t.equal(res.statusCode, 200, 'allowed GET /links/');
-  var data = JSON.parse(res.body);
-  t.ok(Array.isArray(data.links), 'links in body');
+  t.ok(Array.isArray(res.body.links), 'links in body');
 };
 
-//tests.linksPost = function *(t) {
-//  var data = { title: 'cool place', url: 'http://localhost:8000', category: 'cool' };
-//  var res = yield request({ method: 'POST', url: url + '/links/', json: true, data: data }).auth(null, null, true, opts.auth.token);
-//  t.equal(res.statusCode, 200, 'allowed access now');
-//  //var data = JSON.parse(res.body);
-//  //t.ok(Array.isArray(data.links), 'got links back');
-//};
+tests.linksPost = function *(t) {
+  var data = { title: 'cool place', url: 'http://localhost:8000', category: 'cool' };
+  var res = yield request.post({ url: url + '/links/', json: data, auth: auth });
+  t.equal(res.statusCode, 200, 'allowed access now');
+  t.ok(res.body.success, 'success');
+  t.equal(res.body.link.title, 'cool place', 'link validated');
+  //t.equal(res.body.link.fk_user, 'clux') // TODO: something like that
+};
 
+tests.linksGetSingle = function *(t) {
+  var res = yield request.get({ url: url + '/links/1', auth: auth, json: true });
+  t.equal(res.statusCode, 200, 'allowed GET /links/1');
+  t.ok(res.body.success, 'success');
+  t.equal(res.body.link.title, 'sequelize', 'got first link back (from init_db)');
+};
 
 // ----------------------------------------------------------------------------
 

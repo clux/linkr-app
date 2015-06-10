@@ -11,14 +11,15 @@ var list = function *() {
 var show = function *(id) {
   var link = yield Link.findOne({ where: { id: id } });
   if (!link) { this.throw(404, 'invalid id'); }
-  this.body = { link: link };
+  this.body = { success: true, link: link };
 };
 
 var create = function *() {
   var l = yield parse(this);
-  //var link = yield Link.create(l); // TODO: insert with user
-  var link = l;
-  this.body = { success: true, data: link };
+  //console.log('link', l, 'from user', this.state.user.username)
+  // TODO: sequelize to set link.fk_user to id of this.state.username
+  var link = yield Link.create(l);
+  this.body = { success: true, link: link };
 };
 
 var app = koa();
