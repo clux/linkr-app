@@ -1,17 +1,19 @@
-var tape = require('./cotape');
-var co = require('co'); // for running, should maybe move into cotape
+var test = require('bandage');
 var request = require('co-request');
 
 var app = require('../');
 var url = 'http://localhost:8000';
-var tests = {};
+
+test('setup', function *(t) {
+  this.server = app.listen(8000);
+});
 
 // ----------------------------------------------------------------------------
 
-tests['can reach root unauthenticated'] = function *(t) {
+test('can reach root unauthenticated', function *(t) {
   var res = yield request(url + '/');
   t.equal(res.statusCode, 200, 'GET / => 200 OK');
-};
+});
 
 var rejectionTest = function *(t, type, location, code, loginData) {
   var res = yield request[type]({uri: url + location, json: loginData || {} });
@@ -22,30 +24,30 @@ var rejectionTest = function *(t, type, location, code, loginData) {
   t.ok(body.reason, 'forbidden', 'forbidden');
 };
 
-tests['unauthorized beyond auth guard'] = function *(t) {
+test('unauthorized beyond auth guard', function *(t) {
   yield rejectionTest(t, 'get', '/links', 401);
-};
+});
 
-tests['forbidden login without credentials'] = function *(t) {
+test('forbidden login without credentials', function *(t) {
   yield rejectionTest(t, 'post', '/login', 403, {});
-};
+});
 
-tests['forbidden login without correct password'] = function *(t) {
+test('forbidden login without correct password', function *(t) {
   var badCreds = { user: 'clux', password: 'a' };
   yield rejectionTest(t, 'post', '/login', 403, badCreds);
-};
+});
 
-tests['forbidden login with non-existent user'] = function *(t) {
+test('forbidden login with non-existent user', function *(t) {
   var badCreds = { user: 'arstrastasrt', password: 'a' };
   yield rejectionTest(t, 'post', '/login', 403, badCreds);
-};
+});
 
 // ----------------------------------------------------------------------------
 
 // auth test exposes bearer token so other tests can reuse it
 var auth = {};
 
-tests['can authenticate with init_db default creds'] = function *(t) {
+test('can authenticate with init_db default creds', function *(t) {
   var creds = { username: 'clux', password: 'heythere' };
   var res = yield request.post({ uri: url + '/login', json: creds });
   var body = res.body;
@@ -54,36 +56,34 @@ tests['can authenticate with init_db default creds'] = function *(t) {
 
   // expose:
   auth.bearer = body.token;
-};
+});
 
 // ----------------------------------------------------------------------------
 
-tests['can GET /links/ authenticated'] = function *(t) {
+test('can GET /links/ authenticated', function *(t) {
   var res = yield request.get({ url: url + '/links/', auth: auth, json: true });
   t.equal(res.statusCode, 200, 'allowed GET /links/');
   t.ok(Array.isArray(res.body.links), 'links in body');
-};
+});
 
-tests['can POST /links/ authenticated'] = function *(t) {
+test('can POST /links/ authenticated', function *(t) {
   var data = { title: 'cool place', url: 'http://localhost:8000', category: 'cool' };
   var res = yield request.post({ url: url + '/links/', json: data, auth: auth });
   t.equal(res.statusCode, 200, 'allowed access now');
   t.ok(res.body.success, 'success');
   t.equal(res.body.link.title, 'cool place', 'link validated');
   //t.equal(res.body.link.fk_user, 'clux') // TODO: something like that
-};
+});
 
-tests['can GET /links/1 authenticated'] = function *(t) {
+test('can GET /links/1 authenticated', function *(t) {
   var res = yield request.get({ url: url + '/links/1', auth: auth, json: true });
   t.equal(res.statusCode, 200, 'allowed GET /links/1');
   t.ok(res.body.success, 'success');
   t.equal(res.body.link.title, 'sequelize', 'got first link back (from init_db)');
-};
+});
 
 // ----------------------------------------------------------------------------
 
-co(function *() {
-  var server = app.listen(8000);
-  yield *tape(tests);
-  server.close();
+test('teardown', function *(t) {
+  this.server.close();
 });
