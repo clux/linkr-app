@@ -14,10 +14,10 @@
     "build-db": "./init_db.js",
     "build": "npm run build-wc && npm run build-db",
     "start": "node app.js",
-    "test": "LINKR_SILENT=1 node test/*.test.js",
-    "testverbose": "node test/*.test.js",
+    "test": "LINKR_SILENT=1 bndg test/*.test.js",
+    "testverbose": "bndg test/*.test.js",
     "precoverage": "istanbul instrument server -o server-cov",
-    "coverage": "istanbul cover test/*.test.js > /dev/null && cat coverage/lcov.info",
+    "coverage": "istanbul cover bndg test/*.test.js > /dev/null && cat coverage/lcov.info",
     "coveralls": "npm run coverage && cat coverage/lcov.info | coveralls"
   },
   "dependencies": {
@@ -36,8 +36,9 @@
     "swig": "^1.4.2"
   },
   "devDependencies": {
-    "bandage": "^0.1.0",
+    "bandage": "^0.2.0",
     "co": "^4.5.4",
+    "co-fs": "^1.2.0",
     "co-request": "^0.2.1",
     "coveralls": "^2.11.2",
     "istanbul-harmony": "^0.3.12",
