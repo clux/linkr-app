@@ -5,7 +5,7 @@ var Link = require('./db').Link;
 
 var list = function *() {
   var links = yield Link.findAll({ limit: 10, offset: 0 });
-  this.body = { links: links };
+  this.body = { links };
 };
 
 var show = function *(id) {

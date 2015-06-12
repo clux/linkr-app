@@ -7,7 +7,7 @@ var User = db.User;
 
 var createUser = function *(username, email, password) {
   var hash = yield bcrypt.hash(password, 10);
-  return yield User.create({ username: username, email: email, hash: hash });
+  return yield User.create({ username, email, hash });
 };
 
 // force start up with blank tables and initialize database with a single user
