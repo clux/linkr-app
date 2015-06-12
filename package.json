@@ -36,7 +36,7 @@
     "swig": "^1.4.2"
   },
   "devDependencies": {
-    "bandage": "^0.2.0",
+    "bandage": "^0.2.1",
     "co": "^4.5.4",
     "co-fs": "^1.2.0",
     "co-request": "^0.2.1",

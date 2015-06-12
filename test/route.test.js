@@ -4,7 +4,7 @@ var request = require('co-request');
 var app = require('../');
 var url = 'http://localhost:8000';
 
-test('setup', function *(t) {
+test('setup', function () {
   this.server = app.listen(8000);
 });
 
@@ -84,6 +84,6 @@ test('can GET /links/1 authenticated', function *(t) {
 
 // ----------------------------------------------------------------------------
 
-test('teardown', function *(t) {
+test('teardown', function () {
   this.server.close();
 });
