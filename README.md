@@ -15,16 +15,16 @@ openssl genrsa -out server.rsa 2048
 openssl rsa -in server.rsa -pubout > server.rsa.pub
 bower install
 npm install
-npm build
+npm run init
 # create a postgres database, and expose its location:
 export DATABASE_URL=postgres://localhost:5432/testdb
-node app.js
+npm start
 ```
 
 ## Logging in
 Login with static username and password, then you have access to `/post` resources:
 
 ```sh
-curl -X POST -H "Content-Type: application/json" localhost:8000/login -d
+curl -X POST -H "Content-Type: application/json" localhost:8000/login -d '{"username": "usr", "password": "pw"}'
 curl -X GET -H "Authorization: Bearer $TOKEN" localhost:8000/post
 ```
