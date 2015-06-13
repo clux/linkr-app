@@ -10,9 +10,7 @@
   },
   "main": "server",
   "scripts": {
-    "build-wc": "./build.sh",
-    "build-db": "./init_db.js",
-    "build": "npm run build-wc && npm run build-db",
+    "init": "make wc && ./init_db",
     "start": "node app.js",
     "test": "LINKR_SILENT=1 bndg test/*.test.js",
     "testverbose": "bndg test/*.test.js",
