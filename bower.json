@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "dependencies": {
     "icebreaker": "~0.4.1",
-    "linkr-components": "clux/linkr-components"
+    "linkr-components": "clux/linkr-components",
+    "deus-login": "clux/deus-login#~0.6.0"
   }
 }
