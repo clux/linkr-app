@@ -11,8 +11,8 @@ test('web components', function *(t) {
   t.ok(html.indexOf('linkr-list') >= 0, 'linkr-list found');
 
   t.ok(html.indexOf('src="http') < 0, 'no external src links');
-  t.ok(html.indexOf('src=./"') < 0, 'no relative src links');
-  t.ok(html.indexOf('src=/"') < 0, 'no internal src links');
+  t.ok(html.indexOf('src=".') < 0, 'no relative src links');
+  t.ok(html.indexOf('src="/') < 0, 'no internal src links');
   t.ok(html.indexOf('data:image/png;base64') >= 0, 'images inlined');
   // could maybe enforce a max size of inlined images here
 });

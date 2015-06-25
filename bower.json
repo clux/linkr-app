@@ -6,6 +6,7 @@
     "icebreaker": "clux/icebreaker#~0.4.2",
     "linkr-components": "clux/linkr-components",
     "deus-login": "clux/deus-login#~0.7.0",
-    "polymer": "Polymer/polymer#^1.0.4"
+    "polymer": "Polymer/polymer#^1.0.4",
+    "page": "visionmedia/page.js#~1.6.3"
   }
 }
