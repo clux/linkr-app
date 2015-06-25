@@ -32,7 +32,7 @@ exports.postLogin = function *() {
 
 // main app entry-point
 exports.getLogin = function *() {
-  this.body = yield render('entry');
+  this.body = yield render('main');
 };
 
 exports.guard = jwt({ secret: publicKey, algorithm: 'RS256' });
