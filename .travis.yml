@@ -10,8 +10,9 @@ before_script:
   - openssl rsa -in server.rsa -pubout > server.rsa.pub
   - psql -c 'create database travis_linkr;' -U postgres
   - export DATABASE_URL=postgres://postgres@localhost:5432/travis_linkr
-  - npm install bower -g
+  - npm install bower node-gyp-install -g
   - bower install
+  - node-gyp-install
   - npm run init
 
 after_script:
