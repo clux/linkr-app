@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -eu
+set -euo pipefail
 
 PATH="$(npm bin):${PATH}"
 VER=$(git log | head -1 | cut -d " " -f 2)
