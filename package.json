@@ -16,7 +16,8 @@
     "testverbose": "bndg test/*.test.js",
     "precoverage": "istanbul instrument server -o server-cov",
     "coverage": "istanbul cover bndg test/*.test.js > /dev/null && cat coverage/lcov.info",
-    "coveralls": "npm run coverage && cat coverage/lcov.info | coveralls"
+    "coveralls": "npm run coverage && cat coverage/lcov.info | coveralls",
+    "preinstall": "cd app && npm install"
   },
   "dependencies": {
     "co-bcrypt": "^1.0.0",
