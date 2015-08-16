@@ -13,7 +13,11 @@ before_script:
   - export DATABASE_URL=postgres://postgres@localhost:5432/travis_linkr
   - npm install bower -g
   - bower install
-  - npm run init
+  - export LINKR_USER=clux
+  - export LINKR_EMAIL=h@x.io
+  - export LINKR_PASSWORD=heythere
+  - npm run setup
+  - make
 
 after_script:
   - npm run coveralls

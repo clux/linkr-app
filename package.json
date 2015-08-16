@@ -10,7 +10,7 @@
   },
   "main": "server",
   "scripts": {
-    "init": "make && ./init_db.js",
+    "setup": "./init_db.js",
     "start": "node app.js",
     "test": "LINKR_SILENT=1 bndg test/*.test.js",
     "testverbose": "bndg test/*.test.js",

@@ -6,27 +6,48 @@
 
 A link sharing site built on top of iojs, koa, postgresql, and polymer based web components using jwt for authentication.
 
-## Usage
+## Setup
 Clone, generate rsa keys for jwt, set up database, and start:
 
 ```sh
 git clone git@github.com:clux/linkr-app.git && cd linkr-app
+# generate keys for jwt
 openssl genrsa -out server.rsa 2048
 openssl rsa -in server.rsa -pubout > server.rsa.pub
+# install dependencies
 bower install
 npm install
-npm run init
 # create a postgres database, and expose its location:
-export DATABASE_URL=postgres://localhost:5432/testdb
+psql -c 'create database linkr;' -U postgres
+export DATABASE_URL=postgres://localhost:5432/linkr
+# initialize the database with a single administrator
+export LINKR_USER=clux
+export LINKR_EMAIL=h@x.io
+export LINKR_PASSWORD=heythere
+npm run setup
+# build client app
+make
+# start the server
 npm start
 ```
 
-You may need to go via [node-gyp-install](https://npmjs.org/package/node-gyp-install) to install bcrypt.
+You may need to go via [node-gyp-install](https://npmjs.org/package/node-gyp-install) to install bcrypt on certain versions of node.
 
-## Logging in
-Login with static username and password, then you have access to `/post` resources:
+## Client App
+[In development](#3).
+
+## API
+### Authentication
+Authenticate with the credentials exported before calling `npm run init`:
 
 ```sh
-curl -X POST -H "Content-Type: application/json" localhost:8000/login -d '{"username": "usr", "password": "pw"}'
-curl -X GET -H "Authorization: Bearer $TOKEN" localhost:8000/post
+curl -X POST -H "Content-Type: application/json" localhost:8000/login -d '{"username": "clux", "password": "heythere"}'
+curl -X GET -H "Authorization: Bearer $TOKEN" localhost:8000/links
 ```
+
+Any request other than `GET /` or `POST /login` will require the `Authorization: Bearer $TOKEN` header.
+
+### Methods
+### GET /links
+### GET /links/:id
+### POST /links

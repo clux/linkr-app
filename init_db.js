@@ -4,6 +4,11 @@ var bcrypt = require('co-bcrypt');
 var db = require('./server/db');
 var Link = db.Link;
 var User = db.User;
+var env = process.env;
+
+if (!env.LINKR_USER || !env.LINKR_EMAIL || !env.LINKR_PASSWORD) {
+  throw new Error("Missing LINKR_{} environment variables");
+}
 
 var createUser = function *(username, email, password) {
   var hash = yield bcrypt.hash(password, 10);
@@ -14,7 +19,7 @@ var createUser = function *(username, email, password) {
 var main = function *() {
   yield db.inst.sync({ force: true });
 
-  var u = yield createUser('clux', 'clux@x-pec.com', 'heythere');
+  var u = yield createUser(env.LINKR_USER, env.LINKR_EMAIL, env.LINKR_PASSWORD);
   console.log('users now contain [%j]', u);
 
   yield Link.bulkCreate([
