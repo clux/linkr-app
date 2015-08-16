@@ -17,7 +17,7 @@ before_script:
   - export LINKR_EMAIL=h@x.io
   - export LINKR_PASSWORD=heythere
   - npm run setup
-  - make
+  - npm run build
 
 after_script:
   - npm run coveralls

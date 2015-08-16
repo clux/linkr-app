@@ -11,6 +11,7 @@
   "main": "server",
   "scripts": {
     "setup": "./init_db.js",
+    "build": "./build.sh",
     "start": "node app.js",
     "test": "LINKR_SILENT=1 bndg test/*.test.js",
     "testverbose": "bndg test/*.test.js",
@@ -42,7 +43,8 @@
     "co-request": "^1.0.0",
     "coveralls": "^2.11.2",
     "istanbul-harmony": "^0.3.12",
-    "uglify": "^0.1.5",
+    "json": "^9.0.3",
+    "uglify-js": "^2.4.24",
     "vulcanize": "^1.8.1"
   }
 }

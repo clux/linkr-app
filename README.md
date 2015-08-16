@@ -26,7 +26,7 @@ export LINKR_EMAIL=h@x.io
 export LINKR_PASSWORD=heythere
 npm run setup
 # build client app
-make
+npm run build
 # start the server
 npm start
 ```
