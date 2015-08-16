@@ -38,19 +38,6 @@ test('client app contents', function *(t) {
   //var prcsShim = 'process.env';
   //t.equal(js.indexOf(prcsShim), -1, 'no process shim');
 
-  /* try to live without superagent which is 10k minified
-  // superagent + emitters
-  var ajax = 'function Request(method, url)';
-  t.ok(js.indexOf(ajax) > 0, 'superagent exported');
-  t.equal(js.lastIndexOf(ajax), js.indexOf(ajax), 'superagent not found twice');
-  // This pulls in component-emitter and reduce-component (tiny)
-  var weirdEmitter = "require('emitter')";
-  t.ok(js.indexOf(weirdEmitter) > 0, 'component-emitter present');
-  // dont want two event emitters at least though..
-  var normalEmitter = 'EventEmitter';
-  t.equal(js.indexOf(normalEmitter), -1, 'no node emitter pulled in');
-  */
-
   // form serialize
   var srlz = 'function serialize(form, options)';
   t.ok(js.indexOf(srlz) > 0, 'form serialize library included');

@@ -13,7 +13,6 @@ exports.postLogin = function *() {
   var claims = yield parse(this, { limit: '1kb' });
   var valid = false;
   var user = null;
-  console.log('got claims', JSON.stringify(claims));
   if (claims.username && claims.password) {
     user = yield User.findOne({ where: { username: claims.username } });
   }
