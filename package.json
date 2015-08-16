@@ -35,6 +35,7 @@
   },
   "devDependencies": {
     "bandage": "^0.2.1",
+    "browserify": "^11.0.1",
     "co": "^4.5.4",
     "co-fs": "^1.2.0",
     "co-request": "^0.2.1",

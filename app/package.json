@@ -1,0 +1,13 @@
+{
+  "name": "app",
+  "private": true,
+  "description": "linkr-app client application",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo not yet && exit 1"
+  },
+  "dependencies": {
+    "page": "^1.6.3"
+  },
+  "devDependencies": {}
+}

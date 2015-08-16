@@ -21,7 +21,7 @@ export DATABASE_URL=postgres://localhost:5432/testdb
 npm start
 ```
 
-You may need to go via [node-gyp-install](https://npmjs.org/package/node-gyp-install) to install co-bcrypt.
+You may need to go via [node-gyp-install](https://npmjs.org/package/node-gyp-install) to install bcrypt.
 
 ## Logging in
 Login with static username and password, then you have access to `/post` resources:
