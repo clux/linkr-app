@@ -38,7 +38,7 @@ You may need to go via [node-gyp-install](https://npmjs.org/package/node-gyp-ins
 
 ## API
 ### Authentication
-Authenticate with the credentials exported before calling `npm run init`:
+Authenticate with the credentials exported before calling `npm run setup`:
 
 ```sh
 curl -X POST -H "Content-Type: application/json" localhost:8000/login -d '{"username": "clux", "password": "heythere"}'
@@ -49,5 +49,8 @@ Any request other than `GET /` or `POST /login` will require the `Authorization:
 
 ### Methods
 ### GET /links
+Fetches a selection of links.
 ### GET /links/:id
+Fetches a single link.
 ### POST /links
+Creates a new link.
