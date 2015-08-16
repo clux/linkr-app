@@ -19,7 +19,8 @@ test('web components', function *(t) {
   // current size of components + polymer bundle (the biggest file)
   // keep track of it incase it increases significantly
   t.ok(html.length > 150000, 'html bundle contains at least what we expect');
-  t.ok(html.length < 170000, 'html bundle has not gotten too large recently');
+  t.ok(html.length < 180000, 'html bundle has not gotten too large recently');
+  t.pass(html.length + ' is curent html bundle size');
   // TODO: minify this bundle somehow
 });
 
@@ -65,5 +66,6 @@ test('client app size', function *(t) {
   // force significant client app sizes increases to notified us via CI
   // change limit when appropriate - current bounds: [ 5k, 10k ]
   t.ok(js.length > 5000, 'app contains at least what we expect');
-  t.ok(js.length < 10000, 'app has not gotten too large recently');
+  t.ok(js.length < 15000, 'app has not gotten too large recently');
+  t.pass(js.length + ' is curent app size');
 });
