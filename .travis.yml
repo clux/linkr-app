@@ -1,7 +1,8 @@
 language: node_js
 node_js:
-  - iojs
+  - "iojs-v2.5.0"
 
+sudo: false
 addons:
   postgresql: "9.4"
 
