@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "co-bcrypt": "^1.0.0",
-    "co-body": "^2.0.0",
+    "co-body": "^4.0.0",
     "co-views": "^1.0.0",
     "koa": "^0.21.0",
     "koa-jwt": "^1.1.0",
@@ -41,6 +41,7 @@
     "co-request": "^0.2.1",
     "coveralls": "^2.11.2",
     "istanbul-harmony": "^0.3.12",
+    "uglify": "^0.1.5",
     "vulcanize": "^1.8.1"
   }
 }

@@ -19,7 +19,7 @@ app.use(serve('./assets')); // TODO: compress these
 app.use(function *(next) {
   try { yield next; }
   catch(e) {
-    //console.log(e.message);
+    console.log(e.message);
     if (e.status === 401 ) { // auth guard
       this.status = e.status;
       this.body = { success: false, reason: 'Forbidden' };
