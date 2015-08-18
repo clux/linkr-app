@@ -1,13 +1,17 @@
 <html>
 <head>
   <title>linkr</title>
-  <style>body { background: #666; }</style>
+  <style>
+    body { background: #666; }
+    .hidden { display: none; }
+  </style>
   <script src="/js/webcomponents-lite.js"></script>
   <link rel="import" href="/html/components.html">
 </head>
 <body>
   <ice-breaker></ice-breaker>
   <form action="/login" method="post" enctype="application/json" is="deus-login"></form>
+  <ul is="linkr-list"></ul>
   <!-- TODO: conditionally switch to main.min.js -->
   <script type="text/javascript" src="/js/main.js"></script>
 </body>

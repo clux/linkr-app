@@ -27,26 +27,38 @@ var login = function (data, cb) {
   http.send(data);
 };
 
+var hide = function (el) {
+  el.classList.add('hidden');
+};
+var show = function (el) {
+  el.classList.remove('hidden');
+};
+
 document.addEventListener("WebComponentsReady", function () {
   var app = {};
+  // cache elements
+  var f = document.querySelector('form');
+  var ice = document.querySelector('ice-breaker');
+  var list = document.querySelector('ul');
+  list.baseUrl = '/category/';
 
   // routing
   page('/', function () {
     app.route = 'home';
+    [f, ice].forEach(show); //ignore for now
   });
 
   page('/links', function () {
     app.route = 'links';
-    if (!app.token) {
-      // this won't actually work yet because GET /links returns json unconditionally
-      page('/');
-    }
-    else {
-      console.log('in links');
-      get('/links', app.token, function (err, res) {
-        console.log(res);
-      });
-    }
+    [f, ice].forEach(hide);
+    get('/links', app.token, function (err, res) {
+      if (!err && res && res.links) {
+        list.links  = res.links;
+      }
+      else {
+        console.error(err);
+      }
+    });
   });
 
   page('/links/:id', function (data) {
@@ -58,29 +70,32 @@ document.addEventListener("WebComponentsReady", function () {
   page();
 
   // observe login form
-  var f = document.querySelector('form');
   f.addEventListener('submit', function (e) {
     e.preventDefault();
     f.reason = 'Authorizing...';
 
     login(serialize(f), function (err, res) {
-      f.reason = 'Authorized'; // TODO: deus fade out
+      f.reason = 'Authorized';
       app.token = res.token;
       page('/links');
     });
   });
 
   // observe ice-breaker
-  var ice = document.querySelector('ice-breaker');
   ice.addEventListener('hack', function () {
     var hacker = 'username=icarus&password=panopticon';
     login(hacker, function (err, res) {
-      app.token = res.token;
+      if (!err) {
+        app.token = res.token;
+      }
     });
   });
   ice.addEventListener('hackDone', function () {
     if (app.token) {
       page('/links');
+    }
+    else {
+      // TODO: indicate failure in ice-breaker
     }
   });
 });
