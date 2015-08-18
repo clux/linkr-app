@@ -37,23 +37,23 @@ var show = function (el) {
 document.addEventListener("WebComponentsReady", function () {
   var app = {};
   // cache elements
-  var f = document.querySelector('form');
-  var ice = document.querySelector('ice-breaker');
-  var list = document.querySelector('ul');
-  list.baseUrl = '/category/';
+  var $f = document.querySelector('form');
+  var $ice = document.querySelector('ice-breaker');
+  var $list = document.querySelector('ul');
+  $list.baseUrl = '/category/';
 
   // routing
   page('/', function () {
     app.route = 'home';
-    [f, ice].forEach(show); //ignore for now
+    [$f, $ice].forEach(show); //ignore for now
   });
 
   page('/links', function () {
     app.route = 'links';
-    [f, ice].forEach(hide);
+    [$f, $ice].forEach(hide);
     get('/links', app.token, function (err, res) {
       if (!err && res && res.links) {
-        list.links  = res.links;
+        $list.links  = res.links;
       }
       else {
         console.error(err);
@@ -70,19 +70,21 @@ document.addEventListener("WebComponentsReady", function () {
   page();
 
   // observe login form
-  f.addEventListener('submit', function (e) {
+  $f.addEventListener('submit', function (e) {
     e.preventDefault();
-    f.reason = 'Authorizing...';
+    $f.reason = 'Authorizing...';
 
-    login(serialize(f), function (err, res) {
-      f.reason = 'Authorized';
-      app.token = res.token;
-      page('/links');
+    login(serialize($f), function (err, res) {
+      if (!err && res.token) {
+        $f.reason = 'Authorized';
+        app.token = res.token;
+        page('/links');
+      }
     });
   });
 
   // observe ice-breaker
-  ice.addEventListener('hack', function () {
+  $ice.addEventListener('hack', function () {
     var hacker = 'username=icarus&password=panopticon';
     login(hacker, function (err, res) {
       if (!err) {
@@ -90,7 +92,7 @@ document.addEventListener("WebComponentsReady", function () {
       }
     });
   });
-  ice.addEventListener('hackDone', function () {
+  $ice.addEventListener('hackDone', function () {
     if (app.token) {
       page('/links');
     }
