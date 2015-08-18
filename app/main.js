@@ -57,7 +57,7 @@ document.addEventListener("WebComponentsReady", function () {
 
   page();
 
-
+  // observe login form
   var f = document.querySelector('form');
   f.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -70,7 +70,7 @@ document.addEventListener("WebComponentsReady", function () {
     });
   });
 
-  // listen for ice-breaker login
+  // observe ice-breaker
   var ice = document.querySelector('ice-breaker');
   ice.addEventListener('hack', function () {
     var hacker = 'username=icarus&password=panopticon';
