@@ -33,7 +33,6 @@ document.addEventListener("WebComponentsReady", function () {
   // routing
   page('/', function () {
     app.route = 'home';
-    console.log('in home');
   });
 
   page('/links', function () {
@@ -69,6 +68,19 @@ document.addEventListener("WebComponentsReady", function () {
       app.token = res.token;
       page('/links');
     });
+  });
 
+  // listen for ice-breaker login
+  var ice = document.querySelector('ice-breaker');
+  ice.addEventListener('hack', function () {
+    var hacker = 'username=icarus&password=panopticon';
+    login(hacker, function (err, res) {
+      app.token = res.token;
+    });
+  });
+  ice.addEventListener('hackDone', function () {
+    if (app.token) {
+      page('/links');
+    }
   });
 });

@@ -19,8 +19,9 @@ var createUser = function *(username, email, password) {
 var main = function *() {
   yield db.inst.sync({ force: true });
 
-  var u = yield createUser(env.LINKR_USER, env.LINKR_EMAIL, env.LINKR_PASSWORD);
-  console.log('users now contain [%j]', u);
+  var admin = yield createUser(env.LINKR_USER, env.LINKR_EMAIL, env.LINKR_PASSWORD);
+  var hacker = yield createUser('icarus', 'h@x.net', 'panopticon');
+  console.log('users now contain [%j, %j]', admin, hacker);
 
   yield Link.bulkCreate([
     { title: 'sequelize',  url: 'http://docs.sequelizejs.com/', category: 'cool' },
