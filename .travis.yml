@@ -6,6 +6,10 @@ sudo: false
 addons:
   postgresql: "9.4"
 
+before_install:
+  - npm install node-gyp-install -g
+  - node-gyp-install -v v4.0.0
+
 before_script:
   - openssl genrsa -out server.rsa 2048
   - openssl rsa -in server.rsa -pubout > server.rsa.pub
