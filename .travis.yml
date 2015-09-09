@@ -7,8 +7,7 @@ addons:
   postgresql: "9.4"
 
 before_install:
-  - npm install node-gyp-install -g
-  - node-gyp-install -v v4.0.0
+  - npm install -g npm
 
 before_script:
   - openssl genrsa -out server.rsa 2048
