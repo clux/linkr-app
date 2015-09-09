@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 var co = require('co');
-var bcrypt = require('co-bcrypt');
+var bcrypt = require('co-bcrypt-native');
 var db = require('./server/db');
 var Link = db.Link;
 var User = db.User;

@@ -1,4 +1,4 @@
-var bcrypt = require('co-bcrypt');
+var bcrypt = require('co-bcrypt-native');
 var parse = require('co-body');
 var render = require('./render');
 var jwt = require('koa-jwt');

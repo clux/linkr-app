@@ -21,7 +21,7 @@
     "preinstall": "cd app && npm install"
   },
   "dependencies": {
-    "co-bcrypt": "^1.0.0",
+    "co-bcrypt-native": "^0.1.0",
     "co-body": "^4.0.0",
     "co-views": "^2.0.0",
     "koa": "^0.21.0",
