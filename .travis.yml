@@ -8,6 +8,7 @@ addons:
 
 before_install:
   - npm install -g npm
+  - npm config set loglevel info
 
 before_script:
   - openssl genrsa -out server.rsa 2048
