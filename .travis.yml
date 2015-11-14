@@ -1,6 +1,7 @@
 language: node_js
 node_js:
-  - "4.1"
+  - 4
+  - node
 
 sudo: false
 
@@ -32,4 +33,5 @@ before_script:
   - npm run build
 
 after_script:
-  - npm run coveralls
+  - npm install coveralls
+  - npm run coverage | coveralls

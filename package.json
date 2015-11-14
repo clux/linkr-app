@@ -17,7 +17,6 @@
     "testverbose": "bndg test/*.test.js",
     "precoverage": "istanbul instrument server -o server-cov",
     "coverage": "istanbul cover bndg test/*.test.js > /dev/null && cat coverage/lcov.info",
-    "coveralls": "npm run coverage && cat coverage/lcov.info | coveralls",
     "preinstall": "cd app && npm install"
   },
   "dependencies": {
@@ -41,8 +40,7 @@
     "co": "^4.5.4",
     "co-fs": "^1.2.0",
     "co-request": "^1.0.0",
-    "coveralls": "^2.11.2",
-    "istanbul-harmony": "^0.3.12",
+    "istanbul": "^0.4.0",
     "json": "^9.0.3",
     "uglify-js": "^2.4.24",
     "vulcanize": "^1.8.1"
