@@ -1,0 +1,7 @@
+// skeleton
+:host
+  color: #0f0
+  font-weight: normal
+  font-size: 12px
+  font-family: Arial, Helvetica
+  background-image: url(./deus9.png)

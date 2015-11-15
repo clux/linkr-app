@@ -14,6 +14,9 @@ linkr_assets() { #HELP Generate assets:\nLINKR assets
   browserify app/main.js > assets/js/main.js
   uglifyjs assets/js/main.js > assets/js/main.min.js
   vulcanize app/elements.html > assets/html/components.html
+  stylus app/main.stylus --inline \
+    --use autoprefixer-stylus --with "{ browsers: ['last 2 versions'] }" \
+    -o assets/css
 }
 
 linkr_cache () { #HELP Generate cache-config.json based on NODE_ENV:\nLINKR cache
