@@ -9,7 +9,7 @@ var privateKey = fs.readFileSync('./server.rsa');
 
 var User = require('./db').User;
 
-exports.postLogin = function *() {
+exports.postLogin = function* verifyToken() {
   var claims = yield parse(this, { limit: '1kb' });
   var valid = false;
   var user = null;

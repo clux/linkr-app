@@ -16,7 +16,7 @@ if (!process.env.LINKR_SILENT) {
 app.use(serve('./assets')); // TODO: compress these
 
 // error handling - first needed for stuff below here probably
-app.use(function *(next) {
+app.use(function* errorHandler(next) {
   try { yield next; }
   catch(e) {
     console.log(e.message);

@@ -3,18 +3,18 @@ var parse = require('co-body');
 var koa = require('koa');
 var Link = require('./db').Link;
 
-var list = function *() {
+var list = function* listLinks() {
   var links = yield Link.findAll({ limit: 10, offset: 0 });
   this.body = { links };
 };
 
-var show = function *(id) {
+var show = function* showLink(id) {
   var link = yield Link.findOne({ where: { id: id } });
   if (!link) { this.throw(404, 'invalid id'); }
   this.body = { success: true, link: link };
 };
 
-var create = function *() {
+var create = function* createLink() {
   var l = yield parse(this);
   //console.log('link', l, 'from user', this.state.user.username)
   // TODO: sequelize to set link.fk_user to id of this.state.username
