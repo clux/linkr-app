@@ -31,8 +31,6 @@ npm run build
 npm start
 ```
 
-You may need to go via [node-gyp-install](https://npmjs.org/package/node-gyp-install) to install bcrypt on certain versions of node.
-
 ## Client App
 [In development](#3).
 
