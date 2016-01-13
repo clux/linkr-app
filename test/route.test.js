@@ -81,7 +81,7 @@ test('can GET /links/1 authenticated', function *(t) {
 
 // ----------------------------------------------------------------------------
 
-test('teardown', function (t) {
+test('teardown', function *(t) {
   server.close();
   t.pass('waiting for server to close and database connections to fade away');
 });
