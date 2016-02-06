@@ -2,28 +2,25 @@ language: node_js
 node_js:
   - 4
   - node
-
 sudo: false
-
 env:
   - CXX=g++-4.8
-
 addons:
-  postgresql: "9.4"
+  postgresql: '9.4'
   apt:
     sources:
-    - ubuntu-toolchain-r-test
+      - ubuntu-toolchain-r-test
     packages:
-    - g++-4.8
-
+      - g++-4.8
 notifications:
-  email: false
-
+  email:
+    on_success: change
+    on_failure: always
 before_script:
   - openssl genrsa -out server.rsa 2048
-  - openssl rsa -in server.rsa -pubout > server.rsa.pub
-  - psql -c 'create database travis_linkr;' -U postgres
-  - export DATABASE_URL=postgres://postgres@localhost:5432/travis_linkr
+  - 'openssl rsa -in server.rsa -pubout > server.rsa.pub'
+  - "psql -c 'create database travis_linkr;' -U postgres"
+  - 'export DATABASE_URL=postgres://postgres@localhost:5432/travis_linkr'
   - npm install bower -g
   - bower install
   - export LINKR_USER=clux
@@ -31,7 +28,6 @@ before_script:
   - export LINKR_PASSWORD=heythere
   - npm run setup
   - npm run build
-
 after_script:
   - npm install coveralls
-  - npm run coverage | coveralls
+  - 'npm run coverage | coveralls'
