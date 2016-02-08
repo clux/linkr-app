@@ -18,7 +18,7 @@ var rejectionTest = function *(t, type, location, code, loginData) {
   var creds = ' with body ' + JSON.stringify(loginData || {});
   t.ok(!body.success, 'failed to ' + type.toUpperCase() + ' ' + location + creds);
   t.equal(res.statusCode, code, 'should yield ' + code);
-  t.ok(body.reason, 'forbidden', 'forbidden');
+  t.equal(body.reason, 'forbidden', 'forbidden');
 };
 
 test('unauthorized beyond auth guard', function *(t) {

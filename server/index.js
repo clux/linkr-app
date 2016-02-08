@@ -22,7 +22,7 @@ app.use(function* errorHandler(next) {
     console.log(e.message);
     if (e.status === 401 ) { // auth guard
       this.status = e.status;
-      this.body = { success: false, reason: 'Forbidden' };
+      this.body = { success: false, reason: 'forbidden' };
     }
     else {
       console.log(e.message);
