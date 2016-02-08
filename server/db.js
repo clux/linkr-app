@@ -1,5 +1,5 @@
 if (!process.env.DATABASE_URL) {
-  throw new Error("DATABASE_URL not set");
+  throw new Error('DATABASE_URL not set');
 }
 var Sequelize = require('sequelize');
 var sequelize = new Sequelize(process.env.DATABASE_URL, {

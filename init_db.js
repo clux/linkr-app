@@ -7,7 +7,7 @@ var User = db.User;
 var env = process.env;
 
 if (!env.LINKR_USER || !env.LINKR_EMAIL || !env.LINKR_PASSWORD) {
-  throw new Error("Missing LINKR_{} environment variables");
+  throw new Error('Missing LINKR_{} environment variables');
 }
 
 var createUser = function *(username, email, password) {
