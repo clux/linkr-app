@@ -18,7 +18,7 @@ app.use(serve('./assets')); // TODO: compress these
 // error handling - first needed for stuff below here probably
 app.use(function* errorHandler(next) {
   try { yield next; }
-  catch(e) {
+  catch (e) {
     console.log(e.message);
     if (e.status === 401 ) { // auth guard
       this.status = e.status;
