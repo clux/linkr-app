@@ -35,7 +35,7 @@ var Link = sequelize.define('Link', {
   category: {
     type: Sequelize.STRING(16),
     defaultValue: 0,
-    validate: { isAlpha: true }
+    validate: { is: ['^[a-z]+$','i'] }
   }
 });
 
