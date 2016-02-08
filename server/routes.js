@@ -18,8 +18,14 @@ var create = function* createLink() {
   var l = yield parse(this);
   //console.log('link', l, 'from user', this.state.user.username)
   // TODO: sequelize to set link.fk_user to id of this.state.username
-  var link = yield Link.create(l);
-  this.body = { success: true, link: link };
+  try {
+    var link = yield Link.create(l);
+    this.body = { success: true, link: link };
+  }
+  catch (e) {
+    console.warn('Failed to post:', l, e.message);
+    this.throw(400, 'bad request');
+  }
 };
 
 var app = koa();

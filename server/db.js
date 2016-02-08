@@ -10,11 +10,13 @@ var User = sequelize.define('User', {
   email: {
     type: Sequelize.STRING(100),
     unique: true,
+    allowNull: false,
     validate: { isEmail: true, notEmpty: true }
   },
   username: {
     type: Sequelize.STRING(16),
     unique: true,
+    allowNull: false,
     validate: { notEmpty: true }
   },
   hash: {
@@ -26,10 +28,12 @@ var User = sequelize.define('User', {
 var Link = sequelize.define('Link', {
   title: {
     type: Sequelize.STRING(100),
+    allowNull: false,
     validate: { notEmpty: true }
   },
   url: {
     type: Sequelize.STRING(200),
+    allowNull: false,
     validate: { isUrl: true, notEmpty: true }
   },
   category: {

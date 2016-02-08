@@ -72,6 +72,29 @@ test('can POST /links/ authenticated', function *(t) {
   //t.equal(res.body.link.fk_user, 'clux') // TODO: something like that
 });
 
+test('cannot POST /links/ with an invalid link', function *(t) {
+  var failurl = 'x';
+  var data = { title: 'cool place', url: failurl, category: 'cool' };
+  var res = yield request.post({ url: url + '/links/', json: data, auth: auth });
+  t.equal(res.statusCode, 400, '400 for validation error');
+  t.equal(res.body, 'bad request', 'bad request');
+});
+
+test('cannot POST /links/ with an too long link', function *(t) {
+  var failurl = 'http://' + 'x'.repeat(200 - 7 - 4 + 1) + '.com';
+  var data = { title: 'cool place', url: failurl, category: 'cool' };
+  var res = yield request.post({ url: url + '/links/', json: data, auth: auth });
+  t.equal(res.statusCode, 400, '400 for validation error');
+  t.equal(res.body, 'bad request', 'bad request');
+});
+
+test('cannot POST /links/ with missing link', function *(t) {
+  var data = { title: 'cool place', category: 'cool' };
+  var res = yield request.post({ url: url + '/links/', json: data, auth: auth });
+  t.equal(res.statusCode, 400, '400 for validation error');
+  t.equal(res.body, 'bad request', 'bad request');
+});
+
 test('can GET /links/1 authenticated', function *(t) {
   var res = yield request.get({ url: url + '/links/1', auth: auth, json: true });
   t.equal(res.statusCode, 200, 'allowed GET /links/1');
