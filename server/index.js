@@ -5,18 +5,18 @@ var mount = require('koa-mount');
 var serve = require('koa-static');
 var postApp = require('./routes');
 var auth = require('./auth');
-
 var app = koa();
 
 if (!process.env.LINKR_SILENT) {
   app.use(logger());
 }
 
+
 // NB: this serves favicon.ico as well - not sure if that's problematic
 app.use(serve('./assets')); // TODO: compress these
 
 // error handling - first needed for stuff below here probably
-app.use(function* errorHandler(next) {
+app.use(function *errorHandler(next) {
   try { yield next; }
   catch (e) {
     console.log(e.message);

@@ -34,7 +34,7 @@ var show = function (el) {
   el.classList.remove('hidden');
 };
 
-document.addEventListener("WebComponentsReady", function () {
+document.addEventListener('WebComponentsReady', function () {
   var app = {};
   // cache elements
   var $f = document.querySelector('form');
@@ -45,7 +45,7 @@ document.addEventListener("WebComponentsReady", function () {
   // routing
   page('/', function () {
     app.route = 'home';
-    [$f, $ice].forEach(show); //ignore for now
+    [$f, $ice].forEach(show); // ignore for now
   });
 
   page('/links', function () {
