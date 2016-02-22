@@ -7,10 +7,9 @@
 A link sharing site built on top of iojs, koa, postgresql, and polymer based web components using jwt for authentication.
 
 ## Setup
-Clone, generate rsa keys for jwt, set up database, and start:
+Clone and perform a set of steps inside the repo:
 
 ```sh
-git clone git@github.com:clux/linkr-app.git && cd linkr-app
 # generate keys for jwt
 openssl genrsa -out server.rsa 2048
 openssl rsa -in server.rsa -pubout > server.rsa.pub
