@@ -23,7 +23,9 @@ var create = function* createLink() {
     this.body = { success: true, link: link };
   }
   catch (e) {
-    console.warn('Failed to post:', l, e.message);
+    if (!process.env.LINKR_SILENT) {
+      console.warn('Failed to post:', l, e.message);
+    }
     this.throw(400, 'bad request');
   }
 };
